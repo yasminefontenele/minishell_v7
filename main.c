@@ -6,7 +6,7 @@
 /*   By: eliskam <eliskam@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/10 17:01:48 by emencova          #+#    #+#             */
-/*   Updated: 2024/09/29 14:21:13 by eliskam          ###   ########.fr       */
+/*   Updated: 2024/09/29 14:37:09 by eliskam          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,16 +15,16 @@
 
 t_env   g_env;
 
-void sigint_handler(int sig)
+void	sigint_handler(int sig)
 {
-    (void)sig;
-
-    write(STDOUT_FILENO, "\n", 1);
-    rl_on_new_line();
-    rl_replace_line("", 0);
-    rl_redisplay();
+	if (sig == SIGINT)
+	{
+		g_env.exit_status = 130;
+		ioctl(STDIN_FILENO, TIOCSTI, "\n");
+		rl_replace_line("", 0);
+		rl_on_new_line();
+	}
 }
-
 
 int main(int ac, char **av, char **envp)
 {
@@ -38,11 +38,12 @@ int main(int ac, char **av, char **envp)
 	shell.mpid = getpid();
     line = NULL;
 	command_list = NULL;
-	env_init(envp, &shell);  
+	env_init(envp, &shell); 
+	signal(SIGINT, sigint_handler);
+    signal(SIGQUIT,SIG_IGN); 
     while (1)
     {
-        signal(SIGINT, sigint_handler);
-        signal(SIGQUIT,SIG_IGN);
+        
 		line = readline("minishell🔥$ ");
         if (!line)
         {
