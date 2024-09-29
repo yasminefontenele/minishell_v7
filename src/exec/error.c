@@ -6,7 +6,7 @@
 /*   By: eliskam <eliskam@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 16:43:00 by emencova          #+#    #+#             */
-/*   Updated: 2024/09/27 12:32:11 by eliskam          ###   ########.fr       */
+/*   Updated: 2024/09/29 13:52:55 by eliskam          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ void m_error(int error_type, char *limit, int status)
 	else if (error_type == ERR_ISDIR)
 		ft_putstr_fd("Is a directory: ", 2);
     ft_putstr_fd(limit, 2);
+    ft_putstr_fd("\n", 2);
     g_env.exit_status = status;
 }
 
