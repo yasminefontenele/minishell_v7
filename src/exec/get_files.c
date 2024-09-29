@@ -1,0 +1,130 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   param.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: eliskam <eliskam@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/09/02 17:23:23 by emencova          #+#    #+#             */
+/*   Updated: 2024/09/24 13:00:18 by eliskam          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "execute.h"
+
+int open_fd(int fd, char *path, int is_output, int append)
+{
+    if (fd > 2)
+        close(fd);
+    if (!path)
+        return (-1);
+    if (access(path, F_OK) == -1 && !is_output)
+        m_error(ERR_NEWDIR, path, 127);
+    else if (!is_output && access(path, R_OK) == -1)
+        m_error(ERR_NWPERM, path, 126);
+    else if (is_output && access(path, W_OK) == -1 && access(path, F_OK) == 0)
+        m_error(ERR_NWPERM, path, 126);
+    if (is_output)
+	{
+        if (append)
+            return (open(path, O_CREAT | O_WRONLY | O_APPEND, 0666));
+        else
+            return (open(path, O_CREAT | O_WRONLY | O_TRUNC, 0666));
+	}
+    else
+        return (open(path, O_RDONLY));
+}
+
+t_exec *outfile_one(t_exec *node, char **ags, int *len)
+{
+    char *new_line;
+	
+	new_line = "syntax error";
+    (*len)++;
+    printf("Entered outfile_one\n");
+    if (ags[*len])
+	{
+        node->out = open_fd(node->out, ags[*len], 1, 0);
+        if (node->out == -1)
+		{
+            ft_putendl_fd(new_line, 2);
+            g_env.exit_status = 1;
+            *len = -1;
+            return (node);
+        }
+    } 
+	else
+	{
+        ft_putendl_fd(new_line, 2);
+        g_env.exit_status = 2;
+        *len = -1;
+    }
+	 return node;
+}
+
+t_exec *outfile_two(t_exec *node, char **ags, int *len) 
+{
+    char *new_line;
+	
+	new_line = "syntax error";
+    (*len)++;
+    if (ags[*len])
+        node->out = open_fd(node->out, ags[*len], 1, 1);
+    
+    if (!ags[*len] || node->out == -1)
+	{
+        *len = -1;
+        ft_putendl_fd(new_line, 2);
+        g_env.exit_status = 2;
+        *len = -1;
+    }
+    return (node);
+}
+
+t_exec *infile_one(t_exec *node, char **ags, int *len)
+{
+    char *new_line;
+	
+	new_line = "syntax error";
+    (*len)++;
+    if (ags[*len])
+        node->in = open_fd(node->in, ags[*len], 0, 0);
+
+    if (!ags[*len] || node->in == -1)
+	{
+        *len = -1;
+        ft_putendl_fd(new_line, 2);
+		g_env.exit_status = 2;
+        *len = -1;	
+    }
+    return (node);
+}
+
+t_exec	*infile_two(t_exec *node, char **ags, int *len)
+{
+	char	*input[2];
+	char	*new_line;
+	char	*deli[2];
+
+	input[0] = NULL;
+	input[1] = NULL;
+	deli[0] = NULL;
+	deli[1] = "warning: here-document delimited by end-of-file";
+	new_line = "syntax error near unexpected token `newline'";
+	(*len)++;
+	if (ags[++(*len)])
+	{
+		deli[0] = ags[*len];
+		node->in = create_here_document_fd(input, deli);
+	}
+	if (!ags[*len] || node->in == -1)
+	{
+		*len = -1;
+		if (node->in != -1)
+		{
+			ft_putendl_fd(new_line, 2);
+			g_env.exit_status = 2;
+		}
+	}
+	return (node);
+}
