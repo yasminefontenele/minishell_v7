@@ -6,7 +6,7 @@
 /*   By: eliskam <eliskam@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 14:57:57 by emencova          #+#    #+#             */
-/*   Updated: 2024/09/29 13:48:21 by eliskam          ###   ########.fr       */
+/*   Updated: 2024/09/29 20:42:12 by eliskam          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,12 +93,14 @@ t_exec *outfile_one(t_exec *node, char **ags, int *len);
 t_exec *outfile_two(t_exec *node, char **ags, int *len);
 t_exec *infile_one(t_exec *node, char **ags, int *len);
 t_exec	*infile_two(t_exec *node, char **ags, int *len);
-void process_command(t_shell *shell, t_list *cmd_list);
+//void init_exec(t_exec **exec, t_list *cmd_list);
 void error_cd(char **args, char *target_dir);
 char *ft_strndup(char *src, int n);
 void execute_pipeline(t_shell *shell, t_list *commands_list);
 void command_get_pipeline(t_shell *shell, t_list *comnd);
 int handle_basic_builtins(t_shell *shell, char **args);
 int pipe_builtin(t_shell *shell, t_list *cmd_ls, int *exit, int len);
+void parse_redir(t_exec *exec, char **args);
+int ft_str_is_space(char *line);
 
 #endif

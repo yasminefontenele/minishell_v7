@@ -1,17 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   param.c                                            :+:      :+:    :+:   */
+/*   get_files.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: eliskam <eliskam@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 17:23:23 by emencova          #+#    #+#             */
-/*   Updated: 2024/09/24 13:00:18 by eliskam          ###   ########.fr       */
+/*   Updated: 2024/09/29 20:22:21 by eliskam          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execute.h"
 
+/*
 int open_fd(int fd, char *path, int is_output, int append)
 {
     if (fd > 2)
@@ -31,6 +32,77 @@ int open_fd(int fd, char *path, int is_output, int append)
         else
             return (open(path, O_CREAT | O_WRONLY | O_TRUNC, 0666));
 	}
+    else
+        return (open(path, O_RDONLY));
+}
+
+
+int open_fd(int fd, char *path, int is_output, int append)
+{
+    // Close the previous file descriptor if it's greater than 2
+    if (fd > 2)
+        close(fd);
+
+    // Check if the path is valid
+    if (!path)
+        return (-1);
+
+    // Debugging output for the path being checked
+    printf("Checking path: %s\n", path);
+
+    // Access checks for read/write permissions
+    if (access(path, F_OK) == -1 && !is_output) {
+        printf("Error: File does not exist: %s\n", path);
+        m_error(ERR_NEWDIR, path, 127);
+    } 
+    else if (!is_output && access(path, R_OK) == -1) {
+        printf("Error: No read permission for: %s\n", path);
+        m_error(ERR_NWPERM, path, 126);
+    } 
+    else if (is_output && access(path, W_OK) == -1 && access(path, F_OK) == 0) {
+        printf("Error: No write permission for: %s\n", path);
+        m_error(ERR_NWPERM, path, 126);
+    }
+
+    // Open the file based on whether it's input or output
+    if (is_output) {
+        if (append) {
+            printf("Opening output file (append mode): %s\n", path);
+            return (open(path, O_CREAT | O_WRONLY | O_APPEND, 0666));
+        } else {
+            printf("Opening output file (truncate mode): %s\n", path);
+            return (open(path, O_CREAT | O_WRONLY | O_TRUNC, 0666));
+        }
+    } else {
+        printf("Opening input file: %s\n", path);
+        return (open(path, O_RDONLY));
+    }
+}
+*/
+
+int open_fd(int fd, char *path, int is_output, int append)
+{
+    if (fd > 2)
+        close(fd);
+    if (!path)
+        return (-1);
+    
+    printf("Opening file: %s, is_output: %d, append: %d\n", path, is_output, append);
+    
+    if (access(path, F_OK) == -1 && !is_output)
+        m_error(ERR_NEWDIR, path, 127);
+    else if (!is_output && access(path, R_OK) == -1)
+        m_error(ERR_NWPERM, path, 126);
+    else if (is_output && access(path, W_OK) == -1 && access(path, F_OK) == 0)
+        m_error(ERR_NWPERM, path, 126);
+    
+    if (is_output)
+    {
+        if (append)
+            return (open(path, O_CREAT | O_WRONLY | O_APPEND, 0666));
+        else
+            return (open(path, O_CREAT | O_WRONLY | O_TRUNC, 0666));
+    }
     else
         return (open(path, O_RDONLY));
 }

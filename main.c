@@ -6,7 +6,7 @@
 /*   By: eliskam <eliskam@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/10 17:01:48 by emencova          #+#    #+#             */
-/*   Updated: 2024/09/29 15:04:48 by eliskam          ###   ########.fr       */
+/*   Updated: 2024/09/29 19:56:14 by eliskam          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,21 +31,39 @@ int handle_tab()
     return 0;
 }
 
+void cleanup_shell(t_shell *shell)
+{
+    if (shell->cmds)
+    {
+        ft_lstclear(&(shell->cmds), ft_free);
+        shell->cmds = NULL;
+    }
+    if (shell->keys)
+    {
+        int i = 0;
+        while (shell->keys[i])
+        {
+            free(shell->keys[i]);
+            i++;
+        }
+        free(shell->keys);
+        shell->keys = NULL;
+    }
+}
+
 int main(int ac, char **av, char **envp)
 {
     t_shell shell;
     char    *line;
     t_list  *command_list;
 
-    (void)ac;
-	(void)av;
 	shell.cmds = NULL;
 	shell.mpid = getpid();
     line = NULL;
 	command_list = NULL;
 	env_init(envp, &shell);  
     rl_bind_key('\t', handle_tab);
-    while (1)
+    while (ac && av)
     {
         signal(SIGINT, sigint_handler);
         signal(SIGQUIT,SIG_IGN);
@@ -62,10 +80,11 @@ int main(int ac, char **av, char **envp)
         }  
         shell.cmds = command_list;
 		if (command_list)
-			process_command(&shell, command_list);
+			cmd_execute(&shell, command_list);
 		ft_lstclear(&command_list, free);
 		command_list = NULL;
         free(line);
     }
+    cleanup_shell(&shell);
     return (g_env.exit_status);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   process_files.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yfontene <yfontene@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: eliskam <eliskam@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 17:25:13 by emencova          #+#    #+#             */
-/*   Updated: 2024/09/29 14:47:32 by yfontene         ###   ########.fr       */
+/*   Updated: 2024/09/29 20:41:49 by eliskam          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,11 +62,10 @@ int create_here_document_fd(char *input_buffer[2], char *delimiter[2])
     return (fd[PIPE_READ]);
 }
 
-
+/*
 void parse_redir(t_exec *exec, char **args)
 {
     int i;
-   // int fd;
 
     i = 0;
     while (args[i])
@@ -89,19 +88,43 @@ void parse_redir(t_exec *exec, char **args)
         {
             exec = infile_two(exec, args, &i);
         }
-        /*
-        else
-        {
-            fd = open_fd(exec->in, args[i], 0, 0);
-            if (fd == -1)
-                fprintf(stderr, "Error opening file: %s\n", args[i]);
-            else 
-                close(fd);
-        }*/
         i++;
     }
+}
+*/
+void parse_redir(t_exec *exec, char **args)
+{
+    int i = 0;
+    printf("entering parse redir \n");
 
-   // printf("After parse_redir, exec in is - %d, exec out is - %d, args are - %s\n", exec->in, exec->out, args[0]);
+    while (args[i])
+    {
+        if (ft_strcmp(args[i], ">") == 0)
+        {
+            printf("Redirection found: %s\n", args[i + 1]);
+            exec->out = open_fd(exec->out, args[i + 1], 1, 0); // Overwrite
+            printf("out_fd set to: %d\n", exec->out);
+            if (exec->out == -1)
+                perror("Error opening output file");
+            i++;
+        }
+        else if (ft_strcmp(args[i], ">>") == 0)
+        {
+            exec->out = open_fd(exec->out, args[i + 1], 1, 1); // Append
+            if (exec->out == -1)
+                perror("Error opening output file");
+            i++;
+        }
+        else if (ft_strcmp(args[i], "<") == 0)
+        {
+            exec = infile_one(exec, args, &i); // Handle input redirection
+        }
+        else if (ft_strcmp(args[i], "<<") == 0)
+        {
+            exec = infile_two(exec, args, &i); // Handle here-doc
+        }
+        i++;
+    }
 }
 
 int ft_str_is_space(char *line)
@@ -115,22 +138,16 @@ int ft_str_is_space(char *line)
     return 1;
 }
 
-void process_command(t_shell *shell, t_list *cmd_list)
-{	
-	t_exec *exec;
-    char **args;
-	(void)shell;
-    
+/*
+void init_exec(t_exec *exec, t_list *cmd_list)
+{	 
 	exec = (t_exec *)cmd_list->content;
 	exec->path = NULL;
     exec->in = 0;
     exec->out = 1;
-	args = exec->args;
     if (!exec->args[0] || ft_strlen(exec->args[0]) == 0 || ft_str_is_space(exec->args[0]))
-        return;
-    parse_redir(exec, args);
-	if (exec->args[0])
-       cmd_execute(shell, cmd_list);
-	else
-        write(STDERR_FILENO, "Error: Command not found.\n", 26);
-}
+       return;
+	//else
+    //    write(STDERR_FILENO, "Error: Command not found.\n", 26);
+}*/
+

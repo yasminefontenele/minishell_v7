@@ -6,7 +6,7 @@
 /*   By: eliskam <eliskam@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 16:34:30 by emencova          #+#    #+#             */
-/*   Updated: 2024/09/29 14:20:03 by eliskam          ###   ########.fr       */
+/*   Updated: 2024/09/29 20:55:07 by eliskam          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,15 @@ void command_get_single(t_shell *shell, t_list *comnd)
 
     str = NULL;
     node = comnd->content;
+    printf("Command args before parse_redir: ");
+    for (int j = 0; node->args[j]; j++)
+    {
+        printf("%s ", node->args[j]);
+    }
+    printf("\n");
+    printf("Before parse_redir: %s\n", node->args[0]);
+    parse_redir(node, node->args);
+    printf("After parse_redir: out_fd = %d\n", node->out); 
     if (built_check(node))
     {
         builtin(shell, comnd, &g_env.exit_status, ft_strlen(node->args[0]));
@@ -146,14 +155,13 @@ void command_get_pipeline(t_shell *shell, t_list *comnd)
 
 void cmd_execute(t_shell *shell, t_list *commands_list)
 {
-     if (!commands_list)
+    if (!commands_list)
     {
         write(STDERR_FILENO, "Error: No commands to execute\n", 31);
         return;
     }
-    
-     if (commands_list->next)
+    if (commands_list->next)
         execute_pipeline(shell, commands_list);
-     else 
+    else 
         command_get_single(shell, commands_list);  
 }

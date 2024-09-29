@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   p_token_set.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yfontene <yfontene@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: eliskam <eliskam@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 11:47:09 by yfontene          #+#    #+#             */
-/*   Updated: 2024/09/29 11:45:24 by yfontene         ###   ########.fr       */
+/*   Updated: 2024/09/29 20:54:46 by eliskam          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -178,6 +178,10 @@ void tokenize_commands(char **cmdstr, t_list **commands_list, t_shell *shell)
         if (!token)
             ft_error("Malloc failed in tokenize_commands\n", 1); 
         filler_stokens(&cmds[i], &token, i, shell);
+         for (int k = 0; token->tokens[k]; k++)
+        {
+            printf("Token %d: %s\n", k, token->tokens[k]);
+        }
         exec_node = malloc(sizeof(t_exec));
         if (!exec_node)
             ft_error("Malloc failed for exec_node", 1);
@@ -193,6 +197,11 @@ void tokenize_commands(char **cmdstr, t_list **commands_list, t_shell *shell)
         }
         exec_node->args[j] = NULL;
         new_node = ft_lstnew(exec_node);
+        exec_node->path = NULL;
+        exec_node->in = 0;
+        exec_node->out = 1;
+        if (!(exec_node)->args[0] || ft_strlen((exec_node)->args[0]) == 0 || ft_str_is_space((exec_node)->args[0]))
+        return; 
         if (!new_node)
             ft_error("Malloc failed for new_node", 1);
         ft_lstadd_back(commands_list, new_node);
@@ -203,5 +212,4 @@ void tokenize_commands(char **cmdstr, t_list **commands_list, t_shell *shell)
     }
     free_split(cmds);
 }
-
 
