@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yfontene <yfontene@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: eliskam <eliskam@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/10 17:01:48 by emencova          #+#    #+#             */
-/*   Updated: 2024/09/27 13:22:30 by yfontene         ###   ########.fr       */
+/*   Updated: 2024/09/29 14:21:13 by eliskam          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,48 +14,6 @@
 #include "./src/exec/execute.h"
 
 t_env   g_env;
-/*
-static t_shell	var_init(t_shell shell, char *s, char **av)
-{
-	char	*nbr;
-
-	s = getcwd(NULL, 0);
-	shell.keys = set_env("PWD", s, shell.keys, 3);
-	free(s);
-	s = get_env("SHLVL", shell.keys, 5);
-	if (!s || ft_atoi(s) <= 0)
-		nbr = ft_strdup("1");
-	else
-		nbr = ft_itoa(ft_atoi(s) + 1);
-	free(s);
-	shell.keys = set_env("SHLVL", nbr, shell.keys, 5);
-	free(nbr);
-	s = get_env("PATH", shell.keys, 4);
-	if (!s)
-		shell.keys = set_env("PATH", \
-		"/usr/local/sbin:/usr/local/bin:/usr/bin:/bin", shell.keys, 4);
-	free(s);
-	s = get_env("_", shell.keys, 1);
-	if (!s)
-		shell.keys = set_env("_", av[0], shell.keys, 1);
-	free(s);
-	return (shell);
-}
-
-static t_shell	prompt_init(char **av, char **env)
-{
-	t_shell	shell;
-	char		*s;
-
-	s = NULL;
-	shell.cmds = NULL;
-	shell.keys = dupl_form(env);
-	g_env.exit_status = 0;
-	m_getpid(&shell);
-	shell = var_init(shell, s, av);
-	return (shell);
-}
-*/
 
 void sigint_handler(int sig)
 {

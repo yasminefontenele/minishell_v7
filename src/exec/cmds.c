@@ -6,7 +6,7 @@
 /*   By: eliskam <eliskam@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 16:34:30 by emencova          #+#    #+#             */
-/*   Updated: 2024/09/29 13:25:12 by eliskam          ###   ########.fr       */
+/*   Updated: 2024/09/29 14:20:03 by eliskam          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,12 +135,12 @@ void command_get_pipeline(t_shell *shell, t_list *comnd)
     {
         if (execve(node->path, node->args, shell->keys) == -1)
         {
-            m_error(ERR_ISDIR, node->args[0], 126);
+            m_error(ERR_NEWCMD, node->args[0], 126);  // A more generic exec error
             exit(1);
         }
     }
     else
-        m_error(ERR_NEWCMD, node->args[0], 126);
+        m_error(ERR_NEWCMD, node->args[0], 127);
     free_form(&str);
 }
 
