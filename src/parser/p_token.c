@@ -6,7 +6,7 @@
 /*   By: yfontene <yfontene@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 18:11:10 by yfontene          #+#    #+#             */
-/*   Updated: 2024/09/29 11:42:43 by yfontene         ###   ########.fr       */
+/*   Updated: 2024/09/29 13:01:23 by yfontene         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,7 @@ int token_redir_end(char *str, int i)
 char *parse_next_token(char *line, int reset)
 {
     static int current_pos;
-    char *token = NULL;
+    char *token;
     int start;
     int end;
     char quote_char;
@@ -117,12 +117,10 @@ char *parse_next_token(char *line, int reset)
     token = NULL;
     if (reset == 0)
         current_pos = 0;
-    while (line[current_pos])
-    {
+    while (line[current_pos]) {
         current_pos = skip_space(line, current_pos);
-        if (line[current_pos])
-        {
-            if (line[current_pos] == '\"' || line[current_pos] == '\'')
+        if (line[current_pos]) {
+            if (line[current_pos] == '\"')
             {
                 quote_char = line[current_pos];
                 current_pos++;
@@ -133,18 +131,19 @@ char *parse_next_token(char *line, int reset)
                 {
                     end = current_pos;
                     current_pos++;
-                }
-                else 
+                } 
+                else
                     end = -1;
-                if (end != -1)
-                    token = extract_substring(line, start, end);
             } 
-            else 
+            else
             {
-                end = get_end(line, current_pos);
-                if (end != -1)
-                    token = extract_substring(line, current_pos, end);
+                start = current_pos;
+                while (line[current_pos] && line[current_pos] != ' ' && line[current_pos] != '\t' && line[current_pos] != '\"')
+                    current_pos++;
+                end = current_pos;
             }
+            if (end != -1)
+                token = extract_substring(line, start, end);
             current_pos = end;
             return token;
         }

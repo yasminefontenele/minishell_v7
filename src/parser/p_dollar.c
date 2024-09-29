@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   p_dollar.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eliskam <eliskam@student.42.fr>            +#+  +:+       +#+        */
+/*   By: yfontene <yfontene@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 15:21:10 by yfontene          #+#    #+#             */
-/*   Updated: 2024/09/27 10:46:26 by eliskam          ###   ########.fr       */
+/*   Updated: 2024/09/29 12:43:31 by yfontene         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -182,18 +182,13 @@ char *dollar_config(char *str, int pos, t_shell *shell)
         {
             sorted_env = dup_array(shell->keys);
             sort_array(sorted_env);
-
             expanded_value = find_env_value(str, pos, sorted_env);
-
             free_str_array(sorted_env);
             return expanded_value;
         }
         else
-        {
             return ft_strdup("$");
-        }
     }
-
     return ft_strdup(str);
 }
 
