@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yfontene <yfontene@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: eliskam <eliskam@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/10 17:01:48 by emencova          #+#    #+#             */
-/*   Updated: 2024/09/29 14:44:00 by yfontene         ###   ########.fr       */
+/*   Updated: 2024/09/29 15:04:48 by eliskam          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,13 +43,12 @@ int main(int ac, char **av, char **envp)
 	shell.mpid = getpid();
     line = NULL;
 	command_list = NULL;
-	env_init(envp, &shell); 
-	signal(SIGINT, sigint_handler);
-    signal(SIGQUIT,SIG_IGN); 
+	env_init(envp, &shell);  
     rl_bind_key('\t', handle_tab);
     while (1)
     {
-        
+        signal(SIGINT, sigint_handler);
+        signal(SIGQUIT,SIG_IGN);
 		line = readline("minishell🔥$ ");
         if (!line)
         {
