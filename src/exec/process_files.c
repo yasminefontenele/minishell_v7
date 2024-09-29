@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   process_files.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eliskam <eliskam@student.42.fr>            +#+  +:+       +#+        */
+/*   By: yfontene <yfontene@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 17:25:13 by emencova          #+#    #+#             */
-/*   Updated: 2024/09/27 11:46:08 by eliskam          ###   ########.fr       */
+/*   Updated: 2024/09/29 14:47:32 by yfontene         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,16 @@ void parse_redir(t_exec *exec, char **args)
    // printf("After parse_redir, exec in is - %d, exec out is - %d, args are - %s\n", exec->in, exec->out, args[0]);
 }
 
+int ft_str_is_space(char *line)
+{
+    while (*line)
+    {
+        if (!isspace(*line))
+            return 0;
+        line++;
+    }
+    return 1;
+}
 
 void process_command(t_shell *shell, t_list *cmd_list)
 {	
@@ -116,6 +126,8 @@ void process_command(t_shell *shell, t_list *cmd_list)
     exec->in = 0;
     exec->out = 1;
 	args = exec->args;
+    if (!exec->args[0] || ft_strlen(exec->args[0]) == 0 || ft_str_is_space(exec->args[0]))
+        return;
     parse_redir(exec, args);
 	if (exec->args[0])
        cmd_execute(shell, cmd_list);

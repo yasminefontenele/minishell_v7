@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eliskam <eliskam@student.42.fr>            +#+  +:+       +#+        */
+/*   By: yfontene <yfontene@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/10 17:01:48 by emencova          #+#    #+#             */
-/*   Updated: 2024/09/29 14:37:09 by eliskam          ###   ########.fr       */
+/*   Updated: 2024/09/29 14:44:00 by yfontene         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,11 @@ void	sigint_handler(int sig)
 	}
 }
 
+int handle_tab()
+{
+    return 0;
+}
+
 int main(int ac, char **av, char **envp)
 {
     t_shell shell;
@@ -41,6 +46,7 @@ int main(int ac, char **av, char **envp)
 	env_init(envp, &shell); 
 	signal(SIGINT, sigint_handler);
     signal(SIGQUIT,SIG_IGN); 
+    rl_bind_key('\t', handle_tab);
     while (1)
     {
         
