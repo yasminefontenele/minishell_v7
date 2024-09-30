@@ -6,7 +6,7 @@
 /*   By: yfontene <yfontene@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 18:11:10 by yfontene          #+#    #+#             */
-/*   Updated: 2024/09/29 13:01:23 by yfontene         ###   ########.fr       */
+/*   Updated: 2024/09/30 13:07:40 by yfontene         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,20 +117,39 @@ char *parse_next_token(char *line, int reset)
     token = NULL;
     if (reset == 0)
         current_pos = 0;
-    while (line[current_pos]) {
+
+    //printf("Starting parse_next_token at position: %d\n", current_pos);
+    
+    while (line[current_pos])
+    {
         current_pos = skip_space(line, current_pos);
-        if (line[current_pos]) {
+        //printf("Current char after skip_space: '%c'\n", line[current_pos]);
+        if (line[current_pos])
+        {
+            if (line[current_pos] == '>' || line[current_pos] == '<')
+            {
+                //printf("Redirection token found: %c\n", line[current_pos]);
+                start = current_pos;
+                if (line[current_pos + 1] == '>') // Caso de ">>" ou "<<"
+                    current_pos += 2;
+                else
+                    current_pos++;
+                end = current_pos;
+                return extract_substring(line, start, end); // Extrai o redirecionamento como token
+            }
             if (line[current_pos] == '\"')
             {
                 quote_char = line[current_pos];
                 current_pos++;
                 start = current_pos;
+                //printf("Entering quotes: %c\n", quote_char);
                 while (line[current_pos] && line[current_pos] != quote_char)
                     current_pos++;
                 if (line[current_pos] == quote_char)
                 {
                     end = current_pos;
                     current_pos++;
+                    //printf("Closing quotes at position: %d\n", current_pos);
                 } 
                 else
                     end = -1;
@@ -138,12 +157,21 @@ char *parse_next_token(char *line, int reset)
             else
             {
                 start = current_pos;
-                while (line[current_pos] && line[current_pos] != ' ' && line[current_pos] != '\t' && line[current_pos] != '\"')
+                while (line[current_pos] && line[current_pos] != ' ' && line[current_pos] != '\t' &&
+                       line[current_pos] != '\"' && line[current_pos] != '\'' &&
+                       line[current_pos] != '>' && line[current_pos] != '<')
+                {
                     current_pos++;
+                }
                 end = current_pos;
             }
             if (end != -1)
+            {
                 token = extract_substring(line, start, end);
+                //printf("Captured token: '%s'\n", token);
+                return token;
+            }
+                
             current_pos = end;
             return token;
         }

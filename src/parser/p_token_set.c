@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   p_token_set.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eliskam <eliskam@student.42.fr>            +#+  +:+       +#+        */
+/*   By: yfontene <yfontene@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 11:47:09 by yfontene          #+#    #+#             */
-/*   Updated: 2024/09/29 20:54:46 by eliskam          ###   ########.fr       */
+/*   Updated: 2024/09/30 11:41:09 by yfontene         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,7 +132,8 @@ void filler_stokens(char **cmds, t_tokens **token, int nbr, t_shell *shell)
     while ((*token)[i].tokens[j])
     {
         //printf("Token %d: %s\n", j, (*token)[i].tokens[j]);
-
+        if (get_token_type((*token)[i].tokens[j], ft_strlen((*token)[i].tokens[j])))
+            printf("Redirection token found: %s\n", (*token)[i].tokens[j]);
         if ((*token)[i].tokens[j][0] == '$')
             (*token)[i].tokens[j] = dollar_config((*token)[i].tokens[j], 0, shell);
         j++;

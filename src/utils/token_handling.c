@@ -6,7 +6,7 @@
 /*   By: yfontene <yfontene@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 15:06:55 by yasmine           #+#    #+#             */
-/*   Updated: 2024/09/28 14:33:48 by yfontene         ###   ########.fr       */
+/*   Updated: 2024/09/30 13:08:34 by yfontene         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,10 @@ char    **token_split(char *line, int nbr)
         ft_error("malloc failed in token split", 1);
     token[nbr] = NULL;//The last element of the array is NULL
     while (++i < nbr)//Iterate over the number of tokens
+    {
         token[i] = parse_next_token(line, i);//Store the token in the array
+        //printf("Token in token split %d: %s\n", i, token[i]);
+    }
     return (token);
 }
 

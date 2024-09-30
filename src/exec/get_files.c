@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_files.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eliskam <eliskam@student.42.fr>            +#+  +:+       +#+        */
+/*   By: yfontene <yfontene@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 17:23:23 by emencova          #+#    #+#             */
-/*   Updated: 2024/09/29 20:22:21 by eliskam          ###   ########.fr       */
+/*   Updated: 2024/09/30 13:48:19 by yfontene         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,14 @@ int open_fd(int fd, char *path, int is_output, int append)
     if (fd > 2)
         close(fd);
     if (!path)
+    {
+        fprintf(stderr, "Error: Invalid path\n");
         return (-1);
+    }
+
+    t_exec *exec = malloc(sizeof(t_exec));
+    exec->out = STDOUT_FILENO;
+
     
     printf("Opening file: %s, is_output: %d, append: %d\n", path, is_output, append);
     
@@ -99,12 +106,16 @@ int open_fd(int fd, char *path, int is_output, int append)
     if (is_output)
     {
         if (append)
-            return (open(path, O_CREAT | O_WRONLY | O_APPEND, 0666));
+            return (fd = open(path, O_WRONLY | O_CREAT | O_APPEND, 0644));
         else
-            return (open(path, O_CREAT | O_WRONLY | O_TRUNC, 0666));
+            return (fd = open(path, O_WRONLY | O_CREAT | O_TRUNC, 0644));
     }
     else
-        return (open(path, O_RDONLY));
+        return (fd=open(path, O_RDONLY));
+    if (fd == -1)
+        perror("Error opening file");
+
+    return fd;
 }
 
 t_exec *outfile_one(t_exec *node, char **ags, int *len)

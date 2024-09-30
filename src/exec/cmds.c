@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmds.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eliskam <eliskam@student.42.fr>            +#+  +:+       +#+        */
+/*   By: yfontene <yfontene@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 16:34:30 by emencova          #+#    #+#             */
-/*   Updated: 2024/09/29 20:55:07 by eliskam          ###   ########.fr       */
+/*   Updated: 2024/09/30 12:25:36 by yfontene         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,11 @@ void command_get_single(t_shell *shell, t_list *comnd)
     {
         builtin(shell, comnd, &g_env.exit_status, ft_strlen(node->args[0]));
         return;
+    }
+    if (node->out != STDOUT_FILENO)
+    {
+        dup2(node->out, STDOUT_FILENO);
+        close(node->out);  // Fecha o fd original, pois já foi duplicado
     }
     directory = check_cmd(shell, comnd, &str);
     if (directory)

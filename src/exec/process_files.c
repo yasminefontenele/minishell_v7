@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   process_files.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eliskam <eliskam@student.42.fr>            +#+  +:+       +#+        */
+/*   By: yfontene <yfontene@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 17:25:13 by emencova          #+#    #+#             */
-/*   Updated: 2024/09/29 20:41:49 by eliskam          ###   ########.fr       */
+/*   Updated: 2024/09/30 13:48:35 by yfontene         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,28 +92,47 @@ void parse_redir(t_exec *exec, char **args)
     }
 }
 */
+
 void parse_redir(t_exec *exec, char **args)
 {
     int i = 0;
-    printf("entering parse redir \n");
+    //printf("entering parse redir \n");
 
     while (args[i])
     {
         if (ft_strcmp(args[i], ">") == 0)
         {
-            printf("Redirection found: %s\n", args[i + 1]);
-            exec->out = open_fd(exec->out, args[i + 1], 1, 0); // Overwrite
-            printf("out_fd set to: %d\n", exec->out);
+            //printf("Redirection found: %s\n", args[i + 1]);
+            if(!args[i + 1])
+            {
+                //printf("Error: No output file specified\n");
+                return ;
+            }
+            exec->out = open_fd(exec->out, args[i + 1], 1, 0);
+            //printf("exec->out is a valid fd: %d\n", exec->out);
             if (exec->out == -1)
+            {
                 perror("Error opening output file");
-            i++;
+                return ;
+            }
+            dup2(exec->out, STDOUT_FILENO);
+            close(exec->out);
         }
         else if (ft_strcmp(args[i], ">>") == 0)
         {
+            if(!args[i + 1])
+            {
+                //printf("Error: No output file specified\n");
+                return ;
+            }
             exec->out = open_fd(exec->out, args[i + 1], 1, 1); // Append
             if (exec->out == -1)
+            {
                 perror("Error opening output file");
-            i++;
+                return ;
+            }
+            dup2(exec->out, STDOUT_FILENO);
+            close(exec->out);
         }
         else if (ft_strcmp(args[i], "<") == 0)
         {
