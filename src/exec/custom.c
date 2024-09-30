@@ -27,6 +27,7 @@ void	ft_exec(char ***out, char *full, char *ags, char **env)
 	pid_t	pid;
 	int		fd[2];
 	char	**form;
+	int status;
 
 	pipe(fd);
 	pid = fork();
@@ -38,10 +39,12 @@ void	ft_exec(char ***out, char *full, char *ags, char **env)
 		close(fd[PIPE_WRITE]);
 		if (!access(full, F_OK))
 			execve(full, form, env);
-		exit (1);
+		exit (127);
 	}
 	close(fd[PIPE_WRITE]);
 	waitpid(pid, NULL, 0);
+	if (WIFEXITED(status))
+        g_env.exit_status = WEXITSTATUS(status);
 	outpt_update(out, fd[PIPE_READ]);
 	close(fd[PIPE_READ]);
 }

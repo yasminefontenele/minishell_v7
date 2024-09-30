@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmds.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eliskam <eliskam@student.42.fr>            +#+  +:+       +#+        */
+/*   By: yfontene <yfontene@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 16:34:30 by emencova          #+#    #+#             */
-/*   Updated: 2024/09/30 22:22:18 by eliskam          ###   ########.fr       */
+/*   Updated: 2024/10/01 00:25:59 by yfontene         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@ void command_get_single(t_shell *shell, t_list *comnd)
     DIR *directory;
     char **str;
     pid_t pid;
+    int status;
 
     str = NULL;
     node = comnd->content;
@@ -90,19 +91,19 @@ void command_get_single(t_shell *shell, t_list *comnd)
     if (built_check(node))
     {
         builtin(shell, comnd, &g_env.exit_status, ft_strlen(node->args[0]));
-        return;
+        return ;
     }
     if (node->out != STDOUT_FILENO)
     {
         dup2(node->out, STDOUT_FILENO);
-        close(node->out);  // Fecha o fd original, pois já foi duplicado
+        close(node->out);
     }
     directory = check_cmd(shell, comnd, &str);
     if (directory)
     {
         closedir(directory);
         m_error(ERR_ISDIR, node->args[0], 126);
-        return;
+        return ;
     }
     if (node->path && access(node->path, X_OK) == 0)
     {
@@ -110,16 +111,20 @@ void command_get_single(t_shell *shell, t_list *comnd)
         if (pid < 0)
         {
             m_error(ERR_FORK, "Fork failed", 1);
-            return;
+            return ;
         }
         else if (pid == 0)
         {
             execve(node->path, node->args, shell->keys);
             m_error(ERR_ISDIR, node->args[0], 126);
-            exit(1);
+            exit(126);
         }
-        else 
-            waitpid(pid, &g_env.exit_status, 0);
+        else
+        {
+            waitpid(pid, &status, 0);
+            if (WIFEXITED(status))
+                g_env.exit_status = WEXITSTATUS(status);
+        }
     }
     else
         m_error(ERR_NEWCMD, node->args[0], 126);
