@@ -6,7 +6,7 @@
 /*   By: eliskam <eliskam@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 14:57:57 by emencova          #+#    #+#             */
-/*   Updated: 2024/09/29 20:42:12 by eliskam          ###   ########.fr       */
+/*   Updated: 2024/09/30 22:33:54 by eliskam          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ int		builtin(t_shell *shell, t_list *cmd_ls, int *e_xit, int len);
 int		built_check(t_exec *cmd);
 int		m_cd(t_shell *shell);
 int		m_pwd();
-int		m_echo(char **args,t_shell *shell);
+//int		m_echo(char **args,t_shell *shell);
 int		error_unset(char *av);
 int		m_exit(t_shell *shell, t_list *cmd, int *leave);
 int 	find_key_idx(char **keys, char *key);
@@ -102,5 +102,6 @@ int handle_basic_builtins(t_shell *shell, char **args);
 int pipe_builtin(t_shell *shell, t_list *cmd_ls, int *exit, int len);
 void parse_redir(t_exec *exec, char **args);
 int ft_str_is_space(char *line);
+int	m_echo(char **args);
 
 #endif

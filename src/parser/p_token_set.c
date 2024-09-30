@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   p_token_set.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yfontene <yfontene@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: eliskam <eliskam@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 11:47:09 by yfontene          #+#    #+#             */
-/*   Updated: 2024/09/30 11:41:09 by yfontene         ###   ########.fr       */
+/*   Updated: 2024/09/30 22:21:34 by eliskam          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -179,10 +179,10 @@ void tokenize_commands(char **cmdstr, t_list **commands_list, t_shell *shell)
         if (!token)
             ft_error("Malloc failed in tokenize_commands\n", 1); 
         filler_stokens(&cmds[i], &token, i, shell);
-         for (int k = 0; token->tokens[k]; k++)
+     /*  for (int k = 0; token->tokens[k]; k++)
         {
             printf("Token %d: %s\n", k, token->tokens[k]);
-        }
+        }*/
         exec_node = malloc(sizeof(t_exec));
         if (!exec_node)
             ft_error("Malloc failed for exec_node", 1);

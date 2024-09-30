@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmds.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yfontene <yfontene@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: eliskam <eliskam@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 16:34:30 by emencova          #+#    #+#             */
-/*   Updated: 2024/09/30 12:25:36 by yfontene         ###   ########.fr       */
+/*   Updated: 2024/09/30 22:22:18 by eliskam          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ void command_get_single(t_shell *shell, t_list *comnd)
 
     str = NULL;
     node = comnd->content;
-    printf("Command args before parse_redir: ");
+   /* printf("Command args before parse_redir: ");
     for (int j = 0; node->args[j]; j++)
     {
         printf("%s ", node->args[j]);
@@ -85,7 +85,8 @@ void command_get_single(t_shell *shell, t_list *comnd)
     printf("\n");
     printf("Before parse_redir: %s\n", node->args[0]);
     parse_redir(node, node->args);
-    printf("After parse_redir: out_fd = %d\n", node->out); 
+    printf("After parse_redir: out_fd = %d\n", node->out); */
+    
     if (built_check(node))
     {
         builtin(shell, comnd, &g_env.exit_status, ft_strlen(node->args[0]));
