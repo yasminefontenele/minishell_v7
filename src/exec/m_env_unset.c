@@ -6,7 +6,7 @@
 /*   By: eliskam <eliskam@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 15:15:49 by emencova          #+#    #+#             */
-/*   Updated: 2024/09/30 23:02:50 by eliskam          ###   ########.fr       */
+/*   Updated: 2024/09/30 23:08:21 by eliskam          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,7 +128,7 @@ int m_env(t_shell *shell, char **args)
     }
     if (args && args[1] && ft_strcmp(args[1], "PATH") == 0)
     {
-        m_error(ERR_NOTDIR, args[1], 127);
+        ft_error("env:'PATH': No such file or directory ", 127);
         return (1);
     }
     i = 0;

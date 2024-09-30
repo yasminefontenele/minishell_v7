@@ -6,7 +6,7 @@
 /*   By: eliskam <eliskam@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 15:15:09 by emencova          #+#    #+#             */
-/*   Updated: 2024/09/30 22:42:36 by eliskam          ###   ########.fr       */
+/*   Updated: 2024/09/30 23:13:04 by eliskam          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,12 @@ int m_cd(t_shell *shell)
 
     g_env.exit_status = 0;
     args = ((t_exec *)shell->cmds->content)->args;
+    if (args[1] && args[2])
+    {
+        ft_putstr_fd("cd: too many arguments\n", 2);
+        g_env.exit_status = 1;
+        return (g_env.exit_status);
+    }
     home_dir = get_env("HOME", shell->keys, 4);
     if (!home_dir)
     {
