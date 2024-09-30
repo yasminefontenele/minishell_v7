@@ -6,7 +6,7 @@
 /*   By: eliskam <eliskam@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 16:43:00 by emencova          #+#    #+#             */
-/*   Updated: 2024/09/29 13:52:55 by eliskam          ###   ########.fr       */
+/*   Updated: 2024/09/30 23:03:49 by eliskam          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,11 @@
 void m_error(int error_type, char *limit, int status)
 {
     if (error_type == ERR_NEWDIR)
-        ft_putstr_fd("cd: no such file or directory: ", 2);
+        ft_putstr_fd("no such file or directory: ", 2);
     else if (error_type == ERR_NOTDIR)
-        ft_putstr_fd("cd: not a directory: ", 2);
+        ft_putstr_fd("not a directory: ", 2);
     else if (error_type == ERR_NWPERM)
-        ft_putstr_fd("cd: permission denied: ", 2);
+        ft_putstr_fd("permission denied: ", 2);
     else if (error_type == ERR_DUP)
         ft_putstr_fd("dup2 error: ", 2);
     else if (error_type == ERR_FORK)

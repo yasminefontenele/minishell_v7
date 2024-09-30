@@ -6,7 +6,7 @@
 /*   By: eliskam <eliskam@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 14:57:57 by emencova          #+#    #+#             */
-/*   Updated: 2024/09/30 22:33:54 by eliskam          ###   ########.fr       */
+/*   Updated: 2024/09/30 22:55:00 by eliskam          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ int		m_exit(t_shell *shell, t_list *cmd, int *leave);
 int 	find_key_idx(char **keys, char *key);
 int 	m_unset(t_shell *shell);
 int m_export(t_shell *shell);
-int 	m_env(t_shell *shell);
+int 	m_env(t_shell *shell, char **args);
 int 	m_expr(char **args);
 int 	create_here_document_fd(char *input_buffer[2], char *delimiter[2]);
 int 	ft_charstr(const char *str, char *set);
@@ -85,7 +85,6 @@ char	*get_next_line(int fd);
 char	**set_env(char *str, char *val, char **keys, int nbr);
 char	*get_env(char *name, char **env, int name_len);
 
-void	m_getpid(t_shell *piid);
 void	sigint_handler(int sig);
 void	ft_exec(char ***out, char *full, char *ags, char **env);
 int		open_fd(int fd, char *path, int is_output, int append);

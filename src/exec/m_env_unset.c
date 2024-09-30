@@ -3,72 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   m_env_unset.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yfontene <yfontene@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: eliskam <eliskam@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 15:15:49 by emencova          #+#    #+#             */
-/*   Updated: 2024/09/27 13:44:04 by yfontene         ###   ########.fr       */
+/*   Updated: 2024/09/30 23:02:50 by eliskam          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execute.h"
 #include "../../minishell.h"
-
-
-/*
-int find_key_idx(char **keys, char *key)
-{
-    int i ;
-    int key_len; 
-
-	i = 0;
-	key_len= second_strchr(key, '=');
-    if (key_len == -1)
-        return -1;
-    while (keys[i])
-    {
-        if (!ft_strncmp(keys[i], key, key_len + 1))
-            return (i);
-        i++;
-    }
-
-    return (-1);
-}
-
-int	m_export(t_shell *shell)
-{
-	int		i;
-	int		index;;
-	char	**av;
-    int j;
-    char **keys;
-
-	av = ((t_exec *)shell->cmds->content)->args;
-	i = 1;
-    j = 0;
-    keys = shell->keys;
-	if (av[1] == 0)
-    {
-        while (keys[j])
-        {
-        printf("%s\n", keys[i]);
-        j++;
-        }
-        return (0);
-    }
-	while (av[i])
-	{
-		index = find_key_idx(shell->keys, av[i]);
-		if (index != -1)
-		{
-			free(shell->keys[index]);
-			shell->keys[index] = ft_strdup(av[i]);
-		}
-		else
-			shell->keys = extend_form(shell->keys, av[i]);
-		i++;
-	}
-	return (0);
-}*/
 
 char *ft_strndup(char *src, int n)
 {
@@ -150,7 +93,8 @@ int m_unset(t_shell *shell)
     return (0);
 }
 
-int m_env(t_shell *shell)
+/*
+int m_env(t_shell *shell, char **args)
 {
     int i;
 
@@ -159,10 +103,40 @@ int m_env(t_shell *shell)
     {
         ft_error("No enviroment is set", 1);
     }
+    if (args && args[0] && ft_strcmp(args[0], "PATH") == 0)
+    {
+        ft_error("No such file or directory", 127);
+        return (1);
+    }
     while (shell->keys[i])
     {
         printf("%s\n", shell->keys[i]);
         i++;
     }
+    return (0);
+}
+*/
+
+int m_env(t_shell *shell, char **args)
+{
+    int i;
+
+    if (!shell || !shell->keys)
+    {
+        ft_error("No environment is set", 1);
+        return (1);
+    }
+    if (args && args[1] && ft_strcmp(args[1], "PATH") == 0)
+    {
+        m_error(ERR_NOTDIR, args[1], 127);
+        return (1);
+    }
+    i = 0;
+    while (shell->keys[i])
+    {
+        printf("%s\n", shell->keys[i]);
+        i++;
+    }
+    
     return (0);
 }
