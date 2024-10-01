@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yfontene <yfontene@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: eliskam <eliskam@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 14:57:57 by emencova          #+#    #+#             */
-/*   Updated: 2024/10/01 11:52:27 by yfontene         ###   ########.fr       */
+/*   Updated: 2024/10/01 19:38:48 by eliskam          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ void execute_pipeline(t_shell *shell, t_list *commands_list);
 void command_get_pipeline(t_shell *shell, t_list *comnd);
 int handle_basic_builtins(t_shell *shell, char **args);
 int pipe_builtin(t_shell *shell, t_list *cmd_ls, int *exit, int len);
-void parse_redir(t_exec *exec, char **args);
+int parse_redir(t_exec *exec, char **args);
 int ft_str_is_space(char *line);
 int	m_echo(char **args);
 char *remove_quotes(char *str);

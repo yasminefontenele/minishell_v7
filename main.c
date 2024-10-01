@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yfontene <yfontene@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: eliskam <eliskam@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/10 17:01:48 by emencova          #+#    #+#             */
-/*   Updated: 2024/09/30 12:41:13 by yfontene         ###   ########.fr       */
+/*   Updated: 2024/10/01 19:24:31 by eliskam          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,6 @@ int main(int ac, char **av, char **envp)
 		command_list = NULL;
         free(line);
     }
-    cleanup_shell(&shell);
+ //   cleanup_shell(&shell);
     return (g_env.exit_status);
 }
