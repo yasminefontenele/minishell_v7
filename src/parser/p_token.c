@@ -6,7 +6,7 @@
 /*   By: yfontene <yfontene@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 18:11:10 by yfontene          #+#    #+#             */
-/*   Updated: 2024/09/30 13:07:40 by yfontene         ###   ########.fr       */
+/*   Updated: 2024/10/01 13:18:09 by yfontene         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,37 +76,8 @@ int token_redir_end(char *str, int i)
     }
     return (i);
 }
-//function before changing m_export
+
 /*char *parse_next_token(char *line, int reset)
-{
-    printf("entrou em parse_next_token\n");
-    static int current_pos = 0;//static variable to keep track of the current position in the line
-    char *token;//variable to store the token
-    int end;//variable to store the end of the token
-    int initial_offset;//variable to store the initial offset of the token
-
-    token = NULL;
-    initial_offset = 0;
-    if (reset == 0)//if reset is 0, reset the current position to 0
-        current_pos = 0;
-    if (current_pos == 0)//if the current position is 0, skip the leading spaces
-        initial_offset = 0;
-    while (line[current_pos])//iterate over the line
-    {
-        current_pos = skip_space(line, current_pos);//skip spaces
-        if (line[current_pos])//if the current position is not null
-        {
-            end = get_end(line, current_pos);//get the end of the token
-            if (end != -1)//if the end is not -1
-                token = extract_substring(line, current_pos - initial_offset, end);//extract the token
-            current_pos = end;
-            return (token);
-        }
-    }
-    return (token);
-}*/
-
-char *parse_next_token(char *line, int reset)
 {
     static int current_pos;
     char *token;
@@ -177,6 +148,49 @@ char *parse_next_token(char *line, int reset)
         }
     }
     return token;
+}*/
+
+char *parse_next_token(char *line, int reset)
+{
+    static int current_pos;
+    int start = 0;
+    int end = 0;
+    char quote_char;
+
+    if (reset == 0)
+        current_pos = 0;
+
+    while (line[current_pos])
+    {
+        current_pos = skip_space(line, current_pos);
+        if (line[current_pos] == '\"' || line[current_pos] == '\'')
+        {
+            quote_char = line[current_pos++];
+            start = current_pos;
+            while (line[current_pos] && line[current_pos] != quote_char)
+                current_pos++;
+
+            end = current_pos++;
+            return extract_substring(line, start - 1, end);
+        }
+        else if (line[current_pos] == '>' || line[current_pos] == '<')
+        {
+            start = current_pos++;
+            if (line[current_pos] == line[start])
+                current_pos++;
+            end = current_pos;
+            return extract_substring(line, start, end);
+        }
+        else
+        {
+            start = current_pos;
+            while (line[current_pos] && !isspace(line[current_pos]) && line[current_pos] != '>' && line[current_pos] != '<')
+                current_pos++;
+            end = current_pos;
+            return extract_substring(line, start, end);
+        }
+    }
+    return NULL;
 }
 
 

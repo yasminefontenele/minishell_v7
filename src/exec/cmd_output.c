@@ -6,7 +6,7 @@
 /*   By: yfontene <yfontene@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/01 20:24:02 by emencova          #+#    #+#             */
-/*   Updated: 2024/10/01 00:20:24 by yfontene         ###   ########.fr       */
+/*   Updated: 2024/10/01 13:20:25 by yfontene         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ void run_capture_output(char ***output, char *command_path, char *command_args, 
         exit(127);
     }
     close(pipe_fd[PIPE_WRITE]);
-    waitpid(pid, NULL, 0);
+    waitpid(pid, &status, 0);
     if (WIFEXITED(status))
         g_env.exit_status = WEXITSTATUS(status);
     store_cmd_output(output, pipe_fd[PIPE_READ]);

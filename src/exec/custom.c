@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   custom.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: yfontene <yfontene@student.42porto.com>    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/10/01 00:38:20 by yfontene          #+#    #+#             */
+/*   Updated: 2024/10/01 13:19:59 by yfontene         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "execute.h"
 //
 static void	outpt_update(char ***form, int fd)
@@ -35,6 +47,7 @@ void	ft_exec(char ***out, char *full, char *ags, char **env)
 	{
 		close(fd[PIPE_READ]);
 		form = ft_split(ags, ' ');
+		for (int i = 0; form[i]; i++)
 		dup2(fd[PIPE_WRITE], STDOUT_FILENO);
 		close(fd[PIPE_WRITE]);
 		if (!access(full, F_OK))

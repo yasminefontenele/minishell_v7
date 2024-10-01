@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   p_token_set.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eliskam <eliskam@student.42.fr>            +#+  +:+       +#+        */
+/*   By: yfontene <yfontene@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 11:47:09 by yfontene          #+#    #+#             */
-/*   Updated: 2024/09/30 22:21:34 by eliskam          ###   ########.fr       */
+/*   Updated: 2024/10/01 13:17:18 by yfontene         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,8 +112,8 @@ int check_unclosed_quotes(char *str)
 
 void filler_stokens(char **cmds, t_tokens **token, int nbr, t_shell *shell)
 {
-    int i = 0;
-    int j = 0;
+    int i;
+    int j;
     
     i = 0;
     (*token)[i].nbr = count_token(cmds[i]);
@@ -131,7 +131,9 @@ void filler_stokens(char **cmds, t_tokens **token, int nbr, t_shell *shell)
     j = 0;
     while ((*token)[i].tokens[j])
     {
-        //printf("Token %d: %s\n", j, (*token)[i].tokens[j]);
+        //printf("Token original %d: %s\n", j, (*token)[i].tokens[j]);
+        (*token)[i].tokens[j] = remove_quotes((*token)[i].tokens[j]);
+        //printf("Token após remover aspas %d: %s\n", j, (*token)[i].tokens[j]);
         if (get_token_type((*token)[i].tokens[j], ft_strlen((*token)[i].tokens[j])))
             printf("Redirection token found: %s\n", (*token)[i].tokens[j]);
         if ((*token)[i].tokens[j][0] == '$')
@@ -151,16 +153,66 @@ void filler_stokens(char **cmds, t_tokens **token, int nbr, t_shell *shell)
     (*token)[i].tokens[j] = NULL;
 }
 
+char **lst_to_array(t_list *list)
+{
+    int size = ft_lstsize(list);
+    char **array = malloc(sizeof(char *) * (size + 1));
+    int i = 0;
+
+    if (!array)
+        return NULL;
+
+    while (list)
+    {
+        array[i] = ft_strdup((char *)list->content);
+        list = list->next;
+        i++;
+    }
+    array[i] = NULL;
+    return array;
+}
+
 
 char **split_pipes(char *line)
 {
     char **cmds;
+    int i = 0;
+    int start = 0;
+    bool in_quotes = false;
+    char quote_type = '\0';
+    t_list *cmd_list = NULL;
     
-    cmds = ft_split(line, '|');
+    while (line[i])
+    {
+        if ((line[i] == '"' || line[i] == '\'') && (quote_type == '\0' || quote_type == line[i]))
+        {
+            if (!in_quotes)
+                quote_type = line[i];
+            in_quotes = !in_quotes;
+            if (!in_quotes)
+                quote_type = '\0';
+        }
+        if (line[i] == '|' && !in_quotes)
+        {
+            char *cmd = ft_substr(line, start, i - start);
+            ft_lstadd_back(&cmd_list, ft_lstnew(cmd));
+            start = i + 1;
+        }
+        i++;
+    }
+    if (start < i)
+    {
+        char *cmd = ft_substr(line, start, i - start);
+        ft_lstadd_back(&cmd_list, ft_lstnew(cmd));
+    }
+    cmds = lst_to_array(cmd_list);
+    ft_lstclear(&cmd_list, free);
     if (!cmds)
         ft_error("Failed to split commands by pipe\n", 1);
+
     return cmds;
 }
+
 
 void tokenize_commands(char **cmdstr, t_list **commands_list, t_shell *shell)
 {
@@ -179,10 +231,6 @@ void tokenize_commands(char **cmdstr, t_list **commands_list, t_shell *shell)
         if (!token)
             ft_error("Malloc failed in tokenize_commands\n", 1); 
         filler_stokens(&cmds[i], &token, i, shell);
-     /*  for (int k = 0; token->tokens[k]; k++)
-        {
-            printf("Token %d: %s\n", k, token->tokens[k]);
-        }*/
         exec_node = malloc(sizeof(t_exec));
         if (!exec_node)
             ft_error("Malloc failed for exec_node", 1);
@@ -202,7 +250,7 @@ void tokenize_commands(char **cmdstr, t_list **commands_list, t_shell *shell)
         exec_node->in = 0;
         exec_node->out = 1;
         if (!(exec_node)->args[0] || ft_strlen((exec_node)->args[0]) == 0 || ft_str_is_space((exec_node)->args[0]))
-        return; 
+            return ; 
         if (!new_node)
             ft_error("Malloc failed for new_node", 1);
         ft_lstadd_back(commands_list, new_node);

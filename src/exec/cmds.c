@@ -6,7 +6,7 @@
 /*   By: yfontene <yfontene@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 16:34:30 by emencova          #+#    #+#             */
-/*   Updated: 2024/10/01 00:25:59 by yfontene         ###   ########.fr       */
+/*   Updated: 2024/10/01 13:20:11 by yfontene         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,13 @@ void command_get_single(t_shell *shell, t_list *comnd)
         builtin(shell, comnd, &g_env.exit_status, ft_strlen(node->args[0]));
         return ;
     }
+    for (int i = 0; node->args[i]; i++) {
+        char *temp = remove_quotes(node->args[i]);
+        if (temp) {
+            free(node->args[i]); // Libera o antigo argumento
+            node->args[i] = temp; // Atribui o novo argumento
+        }
+    }
     if (node->out != STDOUT_FILENO)
     {
         dup2(node->out, STDOUT_FILENO);
@@ -149,14 +156,14 @@ void command_get_pipeline(t_shell *shell, t_list *comnd)
     {
         closedir(directory);
         m_error(ERR_ISDIR, node->args[0], 126);
-        return;
+        return ;
     }
     if (node->path && access(node->path, X_OK) == 0)
     {
         if (execve(node->path, node->args, shell->keys) == -1)
         {
             m_error(ERR_NEWCMD, node->args[0], 126);  // A more generic exec error
-            exit(1);
+            exit(126);
         }
     }
     else

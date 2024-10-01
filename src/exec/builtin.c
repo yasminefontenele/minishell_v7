@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eliskam <eliskam@student.42.fr>            +#+  +:+       +#+        */
+/*   By: yfontene <yfontene@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 16:20:02 by emencova          #+#    #+#             */
-/*   Updated: 2024/09/30 22:54:27 by eliskam          ###   ########.fr       */
+/*   Updated: 2024/10/01 00:48:27 by yfontene         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int handle_basic_builtins(t_shell *shell, char **args)
         return (g_env.exit_status= m_pwd());
     else if (!ft_strncmp(args[0], "echo", 4))
 		return (g_env.exit_status = m_echo(args));
-	else if (!ft_strncmp(args[0], "unset", 5))
+	  else if (!ft_strncmp(args[0], "unset", 5))
 		return (g_env.exit_status = m_unset(shell));
     else if (!ft_strncmp(args[0], "env", 3))
 		return (g_env.exit_status = m_env(shell, args));

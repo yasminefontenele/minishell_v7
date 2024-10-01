@@ -6,7 +6,7 @@
 /*   By: yfontene <yfontene@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 08:08:44 by emencova          #+#    #+#             */
-/*   Updated: 2024/09/29 11:56:59 by yfontene         ###   ########.fr       */
+/*   Updated: 2024/10/01 13:19:15 by yfontene         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void print_all_variables(char **keys)
     }
 }
 
-char *remove_quotes(char *str)
+/*char *remove_quotes(char *str)
 {
     size_t len;
     char *new_str;
@@ -53,13 +53,39 @@ char *remove_quotes(char *str)
     if (len >= 2 && str[0] == '"' && str[len - 1] == '"')
     {
         new_str = malloc(len - 1);
-        ft_strlcpy(new_str, str + 1, len - 2);
+        ft_strlcpy(new_str, str + 1, len - 2);//
         new_str[len - 2] = '\0';
         free(str);
         return new_str;
     }
     return str;
+}*/
+
+char *remove_quotes(char *arg)
+{
+    char *result;
+    int i;
+    int j;
+
+    if (!arg)
+        return NULL;
+    result = malloc(strlen(arg) + 1);
+    if (!result)
+        return NULL;
+    i = 0;
+    j = 0;
+    while (arg[i])
+    {
+        if (arg[i] != '"' && arg[i] != '\'')
+            result[j++] = arg[i];
+        i++;
+    }
+    result[j] = '\0';
+
+    return result;
 }
+
+
 
 //last version before the correction
 /*void split_var_value(char *arg, char **var, char **value)
