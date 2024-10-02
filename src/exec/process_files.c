@@ -6,7 +6,7 @@
 /*   By: eliskam <eliskam@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 17:25:13 by emencova          #+#    #+#             */
-/*   Updated: 2024/10/01 19:58:32 by eliskam          ###   ########.fr       */
+/*   Updated: 2024/10/02 18:29:42 by eliskam          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,8 +151,9 @@ int parse_redir(t_exec *exec, char **args)
 
 int parse_redir(t_exec *exec, char **args)
 {
-    int i = 0;
-
+    int i;
+    
+    i = 0;
     while (args[i])
     {
         if (ft_strcmp(args[i], ">") == 0)
@@ -162,18 +163,15 @@ int parse_redir(t_exec *exec, char **args)
                 printf("Error: No output file specified\n");
                 return (0);
             }
-
-            // Open file for output redirection (overwrite)
             exec->out = open_fd(exec->out, args[i + 1], 1, 0);
             if (exec->out == -1)
             {
                 perror("Error opening output file");
                 return (0);
             }
-
-            // Set args[i] and args[i + 1] to NULL to exclude them from the final command
             args[i] = NULL;
             args[i + 1] = NULL;
+            return (1);
         }
         else if (ft_strcmp(args[i], ">>") == 0)
         {
@@ -182,30 +180,29 @@ int parse_redir(t_exec *exec, char **args)
                 printf("Error: No output file specified\n");
                 return (0);
             }
-
-            // Open file for output redirection (append)
             exec->out = open_fd(exec->out, args[i + 1], 1, 1);
             if (exec->out == -1)
             {
                 perror("Error opening output file");
                 return (0);
             }
-
             args[i] = NULL;
             args[i + 1] = NULL;
+            return (1);
         }
         else if (ft_strcmp(args[i], "<") == 0)
         {
-            exec = infile_one(exec, args, &i); // Handle input redirection
+            exec = infile_one(exec, args, &i);
+            return (1);
         }
         else if (ft_strcmp(args[i], "<<") == 0)
         {
-            exec = infile_two(exec, args, &i); // Handle here-doc
+            exec = infile_two(exec, args, &i);
+            return (1);
         }
-
         i++;
     }
-    return (1); // Return 1 if any redirection was successfully parsed
+    return (0);
 }
 
 

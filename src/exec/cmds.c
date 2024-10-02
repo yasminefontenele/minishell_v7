@@ -6,7 +6,7 @@
 /*   By: eliskam <eliskam@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 16:34:30 by emencova          #+#    #+#             */
-/*   Updated: 2024/10/02 00:32:18 by eliskam          ###   ########.fr       */
+/*   Updated: 2024/10/02 18:34:44 by eliskam          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,9 +83,11 @@ void command_get_single(t_shell *shell, t_list *comnd)
         builtin(shell, comnd, &g_env.exit_status, ft_strlen(node->args[0]));
         return ;
     }
-    for (int i = 0; node->args[i]; i++) {
-        char *temp = remove_quotes(node->args[i]);
-        if (temp) {
+    for (int i = 0; node->args[i]; i++)
+    {
+       char *temp = remove_quotes(node->args[i]);
+       if (temp)
+        {
             free(node->args[i]); // Libera o antigo argumento
             node->args[i] = temp; // Atribui o novo argumento
         }
@@ -247,8 +249,7 @@ void command_get_redir(t_shell *shell, t_list *comnd)
         close(node->out);
         return;
     }
-}
-    /* // NOT SURE ABOUT THIS BELOW?? ///
+     // NOT SURE ABOUT THIS BELOW?? /
     directory = check_cmd(shell, comnd, &str);
     if (directory)
     {
@@ -285,7 +286,7 @@ void command_get_redir(t_shell *shell, t_list *comnd)
     else
         m_error(ERR_NEWCMD, node->args[0], 126);
     close(node->out);
-}*/
+}
 
 
 void cmd_execute(t_shell *shell, t_list *commands_list)
@@ -298,13 +299,12 @@ void cmd_execute(t_shell *shell, t_list *commands_list)
     }
     t_exec *exec = commands_list->content;
     check = parse_redir(exec, exec->args);
-
     if (check == 1)
     {
         command_get_redir(shell, commands_list);
         return;
     }   
-    if (commands_list->next)
+    else if (check == 0 && commands_list->next)
         execute_pipeline(shell, commands_list);
     else 
         command_get_single(shell, commands_list);

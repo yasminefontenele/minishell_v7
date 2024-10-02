@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yfontene <yfontene@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: eliskam <eliskam@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 16:20:02 by emencova          #+#    #+#             */
-/*   Updated: 2024/10/01 00:48:27 by yfontene         ###   ########.fr       */
+/*   Updated: 2024/10/02 18:34:14 by eliskam          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,13 @@ int handle_basic_builtins(t_shell *shell, char **args)
     if (!ft_strncmp(args[0], "pwd", 3))
         return (g_env.exit_status= m_pwd());
     else if (!ft_strncmp(args[0], "echo", 4))
-		return (g_env.exit_status = m_echo(args));
+	      return (g_env.exit_status = m_echo(args));
 	  else if (!ft_strncmp(args[0], "unset", 5))
-		return (g_env.exit_status = m_unset(shell));
+	  	  return (g_env.exit_status = m_unset(shell));
     else if (!ft_strncmp(args[0], "env", 3))
-		return (g_env.exit_status = m_env(shell, args));
+		    return (g_env.exit_status = m_env(shell, args));
     else if (!ft_strncmp(args[0], "expr", 4))
-		return (g_env.exit_status = m_expr(args));
+		    return (g_env.exit_status = m_expr(args));
     return (-1); 
 }
 
@@ -31,7 +31,6 @@ int builtin(t_shell *shell, t_list *cmd_ls, int *exit, int len)
 {
     char **args;
     int builtin_result;
-       
     while (cmd_ls)
     {
         args = ((t_exec *)cmd_ls->content)->args;
