@@ -3,46 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   m_export_expr.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yfontene <yfontene@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: eliskam <eliskam@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 08:08:44 by emencova          #+#    #+#             */
-/*   Updated: 2024/10/01 13:19:15 by yfontene         ###   ########.fr       */
+/*   Updated: 2024/10/04 16:56:27 by eliskam          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 //#include "../minishell.h"
 #include "execute.h"
 
-
-#include <ctype.h>
-
-int is_valid_env_var(const char *var_name)
-{
-    int i = 0;
-
-
-    while (isspace(var_name[i]))
-        i++;
-    if (var_name[i] == '\0')
-        return 0;
-    while (var_name[i] != '\0')
-        i++;
-    while (isspace(var_name[i - 1]))
-        i--;
-    return i > 0;
-}
-
-void print_all_variables(char **keys)
-{
-    int i;
-    
-    i = 0;
-    while (keys[i])
-    {
-        printf("declare -x %s\n", keys[i]);
-        i++;
-    }
-}
 
 /*char *remove_quotes(char *str)
 {
@@ -168,7 +138,7 @@ void split_var_value(char *arg, char **var, char **value)
     else
         *value = ft_strdup("");
 }
-
+/*
 int m_export(t_shell *shell)
 {
     int i;
@@ -255,6 +225,104 @@ int m_export(t_shell *shell)
     }
     return 1;
 }
+*/
+
+void print_export(char **keys)
+{
+    int i;
+    int j;
+    char *temp;
+
+    i = 0;
+    while (keys[i] != NULL)
+    {
+        j = i + 1;
+        while (keys[j] != NULL)
+        {
+            if (strcmp(keys[i], keys[j]) > 0)
+            {
+                temp = keys[i];
+                keys[i] = keys[j];
+                keys[j] = temp;
+            }
+            j++;
+        }
+        i++;
+    }
+    i = 0;
+    while (keys[i])
+    {
+        printf("declare -x %s\n", keys[i]);
+        i++;
+    }
+}
+
+int m_export(t_shell *shell)
+{
+    int i;
+    char **av;
+    char *var_name;
+    char *value;
+    char *equals_sign;
+    int index;
+    
+    av = ((t_exec *)shell->cmds->content)->args;
+    i = 1;
+    if (!av[1])
+    {
+        print_export(shell->keys);
+        return 0;
+    }
+    while (av[i])
+    {
+        equals_sign = ft_strchr(av[i], '=');
+
+        if (equals_sign != NULL)
+        {
+            split_var_value(av[i], &var_name, &value);
+            if (value && value[0] == '$')
+            {
+                char *expanded_value = get_env_for_export(shell, value + 1);
+                if (expanded_value)
+                {
+                    free(value);
+                    value = ft_strdup(expanded_value);
+                    free(expanded_value);
+                }
+            }  
+            if (var_name && is_valid_env_var(var_name))
+            {
+                index = find_key_idx(shell->keys, var_name);
+                if (index != -1)
+                {
+                    free(shell->keys[index]);
+                    shell->keys[index] = ft_strdup(av[i]);
+                }
+                else
+                    shell->keys = extend_form(shell->keys, av[i]);
+                if (value && *value != '\0')
+                    set_env_ex(shell, var_name, value);
+            }
+            else
+                write(STDERR_FILENO, "Not a valid identifier\n", 23);
+            free(var_name);
+            free(value);
+        }
+        else
+        {
+            if (is_valid_env_var(av[i]))
+            {
+                index = find_key_idx(shell->keys, av[i]);
+                if (index == -1)
+                    shell->keys = extend_form(shell->keys, ft_strjoin(av[i], "="));
+            }
+            else
+                write(STDERR_FILENO, "Not a valid identifier\n", 23);
+        }
+        i++;
+    }
+    return (1);
+}
 
 int m_expr(char **args)
 {
@@ -277,15 +345,15 @@ int m_expr(char **args)
         if (num2 == 0)
         {
             printf("expr: divisão por zero\n");
-            return 1;
+            return (1);
         }
         printf("%d\n", num1 / num2);
     }
     else
     {
         printf("expr: operador inválido\n");
-        return 1;
+        return (1);
     }
-    return 0;
+    return (0);
 }
 

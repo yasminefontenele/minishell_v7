@@ -6,7 +6,7 @@
 /*   By: eliskam <eliskam@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 15:15:09 by emencova          #+#    #+#             */
-/*   Updated: 2024/09/30 23:13:04 by eliskam          ###   ########.fr       */
+/*   Updated: 2024/10/04 15:51:02 by eliskam          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +110,11 @@ int m_echo(char **args)
     i = 1;
     if (!args || !args[0])
         return (0);
+    if (!args[1])
+    {
+        ft_putchar_fd('\n', STDOUT_FILENO);
+        return (0);
+    }
     while (args[i])
     {
         if (!valid_arg && !ft_strncmp(args[i], "-n", 2) &&

@@ -6,7 +6,7 @@
 /*   By: eliskam <eliskam@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 15:15:49 by emencova          #+#    #+#             */
-/*   Updated: 2024/09/30 23:08:21 by eliskam          ###   ########.fr       */
+/*   Updated: 2024/10/04 16:58:31 by eliskam          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,56 @@ int m_unset(t_shell *shell)
 	av = ((t_exec *)shell->cmds->content)->args;
     if (form_len(av) < 2)
         return (0);
+    if (av[1][0] == '-' && av[1][1] == 'n')
+        return (0);
+    while (av[i])
+    {
+        if (av[i][ft_strlen(av[i]) - 1] != '=')
+        {
+            var_env = ft_strjoin(av[i], "=");
+            free(av[i]);
+            av[i] = var_env;
+        }
+        index = find_key_idx(shell->keys, av[i]);
+        if (index != -1)
+        {
+            free(shell->keys[index]);
+            while (shell->keys[index])
+            {
+                shell->keys[index] = shell->keys[index + 1];
+                index++;
+            }
+        }
+        i++;
+    }
+    return (0);
+}
+/*
+int m_unset(t_shell *shell)
+{
+    char **av;
+    char *var_env;
+    int i;
+    int index;
+
+    i = 1;
+    av = ((t_exec *)shell->cmds->content)->args;
+
+    // Check if the command is "unset ALL VARIABLES"
+    if (av[1] && ft_strcmp(av[1], "ALL") == 0 && av[2] && ft_strcmp(av[2], "VARIABLES") == 0)
+    {
+        i = 0;
+        while (shell->keys[i])
+        {
+            free(shell->keys[i]);
+            i++;
+        }
+        free(shell->keys);
+        shell->keys = NULL;
+        return (0);
+    }
+    if (form_len(av) < 2)
+        return (0);
     while (av[i])
     {
         if (av[i][ft_strlen(av[i]) - 1] != '=')
@@ -93,29 +143,6 @@ int m_unset(t_shell *shell)
     return (0);
 }
 
-/*
-int m_env(t_shell *shell, char **args)
-{
-    int i;
-
-    i = 0;
-    if (!shell || !shell->keys)
-    {
-        ft_error("No enviroment is set", 1);
-    }
-    if (args && args[0] && ft_strcmp(args[0], "PATH") == 0)
-    {
-        ft_error("No such file or directory", 127);
-        return (1);
-    }
-    while (shell->keys[i])
-    {
-        printf("%s\n", shell->keys[i]);
-        i++;
-    }
-    return (0);
-}
-*/
 
 int m_env(t_shell *shell, char **args)
 {
@@ -138,5 +165,34 @@ int m_env(t_shell *shell, char **args)
         i++;
     }
     
+    return (0);
+}
+*/
+
+int m_env(t_shell *shell, char **args)
+{
+    int i;
+    char *equals_sign ;
+
+    if (!shell || !shell->keys)
+    {
+        ft_error("No environment is set", 1);
+        return (1);
+    }
+    if (args && args[1] && ft_strcmp(args[1], "PATH") == 0)
+    {
+        ft_error("env:'PATH': No such file or directory ", 127);
+        return (1);
+    }
+    i = 0;
+    while (shell->keys[i])
+    {
+        equals_sign = ft_strchr(shell->keys[i], '=');
+        if (equals_sign && equals_sign[1] != '\0')
+        {
+            printf("%s\n", shell->keys[i]);
+        }
+        i++;
+    } 
     return (0);
 }

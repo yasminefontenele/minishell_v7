@@ -6,12 +6,61 @@
 /*   By: eliskam <eliskam@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 15:15:25 by emencova          #+#    #+#             */
-/*   Updated: 2024/09/30 23:32:39 by eliskam          ###   ########.fr       */
+/*   Updated: 2024/10/04 15:14:48 by eliskam          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execute.h"
 
+int is_valid_env_var(const char *var_name)
+{
+    int i = 0;
+
+
+    while (ft_isspace(var_name[i]))
+        i++;
+    if (var_name[i] == '\0')
+        return 0;
+    while (var_name[i] != '\0')
+        i++;
+    while (ft_isspace(var_name[i - 1]))
+        i--;
+    return i > 0;
+}
+
+int is_invalid_var_assignment(char *cmd)
+{
+    char *equals_sign;
+    if (!cmd || !*cmd)
+        return (0);
+    equals_sign = ft_strchr(cmd, '=');
+    if (equals_sign != NULL && *(equals_sign + 1) == '\0')
+        return (1);
+    return (0);
+}
+
+/*
+
+int is_invalid_var_assignment(char *cmd)
+{
+    char *equals_sign;
+
+    if (!cmd || !*cmd)
+        return (0);
+
+    equals_sign = ft_strchr(cmd, '=');
+    if (equals_sign == cmd || (equals_sign != NULL && *(equals_sign + 1) == '\0'))
+    {
+        return (1);
+    }
+    if (equals_sign != NULL && equals_sign == cmd + 1 && cmd[0] == ' ')
+    {
+        return (1);
+    }
+
+    return (0);
+}
+*/
 long long ft_atoll(const char *str)
 {
     long long result;

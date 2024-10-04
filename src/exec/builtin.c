@@ -6,7 +6,7 @@
 /*   By: eliskam <eliskam@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 16:20:02 by emencova          #+#    #+#             */
-/*   Updated: 2024/10/02 18:34:14 by eliskam          ###   ########.fr       */
+/*   Updated: 2024/10/04 15:41:22 by eliskam          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int builtin(t_shell *shell, t_list *cmd_ls, int *exit, int len)
         else if (*args && !ft_strncmp(args[0], "cd", 2) && len == 2)
             return(g_env.exit_status = m_cd(shell));
         else if (!cmd_ls->next && args && !ft_strncmp(args[0], "export", 6))
-              return(g_env.exit_status = m_export(shell));
+                return(g_env.exit_status = m_export(shell));
         else if (!cmd_ls->next && args && (builtin_result = handle_basic_builtins(shell,args)) != -1)
             return(g_env.exit_status = builtin_result);
         signal(SIGINT, SIG_IGN);
@@ -59,7 +59,7 @@ int built_check(t_exec *cmd)
 		return (0);
 	if ((cmd->args && ft_strchr(*cmd->args, '/')) || (cmd->args && ft_strchr((const char *)cmd->args, '/')))
 		return (0);
-	i = ft_strlen(*cmd->args);
+	i = ft_strlen(*cmd->args); 
 	if (!ft_strncmp(*cmd->args, "pwd", i) && i == 3)
 		return (1);
 	if (!ft_strncmp(*cmd->args, "env", i) && i == 3)

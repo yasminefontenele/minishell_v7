@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yfontene <yfontene@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: eliskam <eliskam@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/14 19:48:13 by yasmine           #+#    #+#             */
-/*   Updated: 2024/09/28 12:22:06 by yfontene         ###   ########.fr       */
+/*   Updated: 2024/10/02 19:18:29 by eliskam          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,7 +121,7 @@ typedef struct s_shell
 {
 	t_list	*cmds; // linked list of commands
 	char	**keys; // enviroment and keys
-	int nbr_keys;
+	//int nbr_keys;
 	pid_t	mpid; // main process id
 }		t_shell;
 typedef struct s_data

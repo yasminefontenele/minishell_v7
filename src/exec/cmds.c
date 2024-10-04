@@ -6,7 +6,7 @@
 /*   By: eliskam <eliskam@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 16:34:30 by emencova          #+#    #+#             */
-/*   Updated: 2024/10/02 18:34:44 by eliskam          ###   ########.fr       */
+/*   Updated: 2024/10/04 15:23:23 by eliskam          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,8 @@ void command_get_single(t_shell *shell, t_list *comnd)
     int status;
 
     str = NULL;
-    node = comnd->content;  
+    node = comnd->content;
+    
     if (built_check(node))
     {
         builtin(shell, comnd, &g_env.exit_status, ft_strlen(node->args[0]));
@@ -149,7 +150,7 @@ void command_get_pipeline(t_shell *shell, t_list *comnd)
     {
         if (execve(node->path, node->args, shell->keys) == -1)
         {
-            m_error(ERR_NEWCMD, node->args[0], 126);  // A more generic exec error
+            m_error(ERR_NEWCMD, node->args[0], 126);
             exit(126);
         }
     }
@@ -291,13 +292,19 @@ void command_get_redir(t_shell *shell, t_list *comnd)
 
 void cmd_execute(t_shell *shell, t_list *commands_list)
 {
-    int check = 0;
+    int check;
+    t_exec *exec;
+    
+    check = 0;
+    exec = commands_list->content;
     if (!commands_list)
     {
         write(STDERR_FILENO, "Error: No commands to execute\n", 31);
         return;
     }
-    t_exec *exec = commands_list->content;
+    if (is_invalid_var_assignment(exec->args[0]))
+        return; 
+   // exec = commands_list->content;
     check = parse_redir(exec, exec->args);
     if (check == 1)
     {

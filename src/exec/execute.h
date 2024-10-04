@@ -6,7 +6,7 @@
 /*   By: eliskam <eliskam@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 14:57:57 by emencova          #+#    #+#             */
-/*   Updated: 2024/10/01 19:38:48 by eliskam          ###   ########.fr       */
+/*   Updated: 2024/10/03 00:26:03 by eliskam          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <stdlib.h>
+# include <ctype.h>
 # include <unistd.h>
 # include <fcntl.h>
 # include <sys/wait.h>
@@ -84,6 +85,7 @@ char	**extend_form(char **insd, char *nstr);
 char	*get_next_line(int fd);
 char	**set_env(char *str, char *val, char **keys, int nbr);
 char	*get_env(char *name, char **env, int name_len);
+void	set_env_ex(t_shell *shell, char *var_name, char *value);
 
 void	sigint_handler(int sig);
 void	ft_exec(char ***out, char *full, char *ags, char **env);
@@ -103,5 +105,10 @@ int parse_redir(t_exec *exec, char **args);
 int ft_str_is_space(char *line);
 int	m_echo(char **args);
 char *remove_quotes(char *str);
+int is_invalid_var_assignment(char *cmd);
+int is_valid_env_var(const char *var_name);
+
+
+char *get_env_for_export(t_shell *shell, const char *var);
 
 #endif

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   p_token_set.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yfontene <yfontene@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: eliskam <eliskam@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 11:47:09 by yfontene          #+#    #+#             */
-/*   Updated: 2024/10/01 13:17:18 by yfontene         ###   ########.fr       */
+/*   Updated: 2024/10/04 15:10:21 by eliskam          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -254,6 +254,8 @@ void tokenize_commands(char **cmdstr, t_list **commands_list, t_shell *shell)
         if (!new_node)
             ft_error("Malloc failed for new_node", 1);
         ft_lstadd_back(commands_list, new_node);
+        if (is_invalid_var_assignment(exec_node->args[0]))
+            return;
         free_tokens(token);
         free(token->type);
         free(token);
