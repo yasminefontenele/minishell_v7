@@ -6,7 +6,7 @@
 /*   By: eliskam <eliskam@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 16:34:30 by emencova          #+#    #+#             */
-/*   Updated: 2024/10/04 15:23:23 by eliskam          ###   ########.fr       */
+/*   Updated: 2024/10/04 22:06:12 by eliskam          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -289,7 +289,7 @@ void command_get_redir(t_shell *shell, t_list *comnd)
     close(node->out);
 }
 
-
+/*
 void cmd_execute(t_shell *shell, t_list *commands_list)
 {
     int check;
@@ -315,4 +315,35 @@ void cmd_execute(t_shell *shell, t_list *commands_list)
         execute_pipeline(shell, commands_list);
     else 
         command_get_single(shell, commands_list);
+}
+*/
+
+void cmd_execute(t_shell *shell, t_list *commands_list)
+{
+    int check;
+    t_exec *exec;
+    
+    if (!commands_list)
+    {
+        write(STDERR_FILENO, "Error: No commands to execute\n", 31);
+        return;
+    }  
+    exec = commands_list->content; 
+    if (is_invalid_var_assignment(exec->args[0]))
+        return;     
+    check = parse_redir(exec, exec->args);
+    if (check == 1)
+    {
+        command_get_redir(shell, commands_list);
+        return;
+    }
+    else if (check == 0)
+    {
+        if (exec->out == -1 || exec->in == -1)
+            return;
+        else if (commands_list->next)
+            execute_pipeline(shell, commands_list);
+         else
+            command_get_single(shell, commands_list);
+    }
 }

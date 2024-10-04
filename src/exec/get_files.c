@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_files.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yfontene <yfontene@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: eliskam <eliskam@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 17:23:23 by emencova          #+#    #+#             */
-/*   Updated: 2024/09/30 13:48:19 by yfontene         ###   ########.fr       */
+/*   Updated: 2024/10/04 21:41:38 by eliskam          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,10 @@ int open_fd(int fd, char *path, int is_output, int append)
         return (open(path, O_RDONLY));
     }
 }
-*/
+
+
+
+///THIS ONE WORKED LAST TIME!!!!////
 
 int open_fd(int fd, char *path, int is_output, int append)
 {
@@ -93,16 +96,23 @@ int open_fd(int fd, char *path, int is_output, int append)
     t_exec *exec = malloc(sizeof(t_exec));
     exec->out = STDOUT_FILENO;
 
-    
-    printf("Opening file: %s, is_output: %d, append: %d\n", path, is_output, append);
+   // printf("Opening file: %s, is_output: %d, append: %d\n", path, is_output, append);
     
     if (access(path, F_OK) == -1 && !is_output)
-        m_error(ERR_NEWDIR, path, 127);
+    {
+        m_error(ERR_NEWDIR, path, 126);
+        return (-1);
+    }
     else if (!is_output && access(path, R_OK) == -1)
+    {
         m_error(ERR_NWPERM, path, 126);
+        return(-1);
+    }
     else if (is_output && access(path, W_OK) == -1 && access(path, F_OK) == 0)
+    {
         m_error(ERR_NWPERM, path, 126);
-    
+        return(-1);
+    }   
     if (is_output)
     {
         if (append)
@@ -117,20 +127,62 @@ int open_fd(int fd, char *path, int is_output, int append)
 
     return fd;
 }
+*/
+
+int open_fd(int fd, char *path, int is_output, int append)
+{
+    if (fd > 2)
+        close(fd);
+    
+    if (!path)
+    {
+        fprintf(stderr, "Error: Invalid path\n");
+        return (-1);
+    }
+    if (!is_output && access(path, F_OK) == -1)
+    {
+        m_error(ERR_NEWDIR, path, 126);
+        return (-1);
+    }
+    if (!is_output && access(path, R_OK) == -1)
+    {
+        m_error(ERR_NWPERM, path, 126);
+        return (-1);
+    }
+    if (is_output && access(path, W_OK) == -1 && access(path, F_OK) == 0)
+    {
+        m_error(ERR_NWPERM, path, 126);
+        return (-1);
+    }
+    if (is_output)
+    {
+        if (append)
+            fd = open(path, O_WRONLY | O_CREAT | O_APPEND, 0644);
+        else
+            fd = open(path, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+    }
+    else
+        fd = open(path, O_RDONLY);
+    
+    if (fd == -1)
+        perror("Error opening file");
+    
+    return (fd);
+}
 
 t_exec *outfile_one(t_exec *node, char **ags, int *len)
 {
-    char *new_line;
+    char *error_msg;
 	
-	new_line = "syntax error";
+	error_msg = "syntax error";
     (*len)++;
-    printf("Entered outfile_one\n");
+   // printf("Entered outfile_one\n");
     if (ags[*len])
 	{
         node->out = open_fd(node->out, ags[*len], 1, 0);
         if (node->out == -1)
 		{
-            ft_putendl_fd(new_line, 2);
+            ft_putendl_fd(error_msg, 2);
             g_env.exit_status = 1;
             *len = -1;
             return (node);
@@ -138,11 +190,11 @@ t_exec *outfile_one(t_exec *node, char **ags, int *len)
     } 
 	else
 	{
-        ft_putendl_fd(new_line, 2);
+        ft_putendl_fd(error_msg, 2);
         g_env.exit_status = 2;
         *len = -1;
     }
-	 return node;
+	 return (node);
 }
 
 t_exec *outfile_two(t_exec *node, char **ags, int *len) 
@@ -166,9 +218,9 @@ t_exec *outfile_two(t_exec *node, char **ags, int *len)
 
 t_exec *infile_one(t_exec *node, char **ags, int *len)
 {
-    char *new_line;
+  //  char *new_line;
 	
-	new_line = "syntax error";
+//	new_line = "syntax error";
     (*len)++;
     if (ags[*len])
         node->in = open_fd(node->in, ags[*len], 0, 0);
@@ -176,8 +228,8 @@ t_exec *infile_one(t_exec *node, char **ags, int *len)
     if (!ags[*len] || node->in == -1)
 	{
         *len = -1;
-        ft_putendl_fd(new_line, 2);
-		g_env.exit_status = 2;
+      //  ft_putendl_fd(new_line, 2);
+		g_env.exit_status = 1;
         *len = -1;	
     }
     return (node);
@@ -211,3 +263,5 @@ t_exec	*infile_two(t_exec *node, char **ags, int *len)
 	}
 	return (node);
 }
+
+

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yfontene <yfontene@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: eliskam <eliskam@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/01 22:31:57 by emencova          #+#    #+#             */
-/*   Updated: 2024/09/30 12:58:02 by yfontene         ###   ########.fr       */
+/*   Updated: 2024/10/04 22:06:39 by eliskam          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,13 +41,19 @@ void execute_pipeline(t_shell *shell, t_list *commands_list)
     int fd[2];
     int prev_fd;
     t_list *cmd_node;
-   // t_exec *exec;
+    t_exec *exec;
     
     cmd_node = commands_list;
     prev_fd = -1;
     while (cmd_node)
     {
-       // exec = (t_exec *)cmd_node->content;
+        exec = (t_exec *)cmd_node->content;
+        if (ft_strcmp(exec->args[0], "|") == 0)
+        {
+            write(STDERR_FILENO, "Error: Misuse of pipe\n", 23);
+            g_env.exit_status = 2; // Set exit status to 2
+            return; // Return early on misuse
+        }
         if (cmd_node->next)
         {
             if (pipe(fd) == -1)

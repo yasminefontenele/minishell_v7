@@ -6,7 +6,7 @@
 /*   By: eliskam <eliskam@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 15:15:25 by emencova          #+#    #+#             */
-/*   Updated: 2024/10/04 15:14:48 by eliskam          ###   ########.fr       */
+/*   Updated: 2024/10/04 21:57:36 by eliskam          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,18 +28,6 @@ int is_valid_env_var(const char *var_name)
     return i > 0;
 }
 
-int is_invalid_var_assignment(char *cmd)
-{
-    char *equals_sign;
-    if (!cmd || !*cmd)
-        return (0);
-    equals_sign = ft_strchr(cmd, '=');
-    if (equals_sign != NULL && *(equals_sign + 1) == '\0')
-        return (1);
-    return (0);
-}
-
-/*
 
 int is_invalid_var_assignment(char *cmd)
 {
@@ -60,7 +48,7 @@ int is_invalid_var_assignment(char *cmd)
 
     return (0);
 }
-*/
+
 long long ft_atoll(const char *str)
 {
     long long result;
@@ -128,8 +116,6 @@ int m_exit(t_shell *shell, t_list *cmd_node, int *leave)
     exit_value = (int)(long_exit_value % 256);
     if (exit_value < 0)
         exit_value += 256;
-
-    printf("Exiting with status %d\n", exit_value);
     exit(exit_value);
 }
 

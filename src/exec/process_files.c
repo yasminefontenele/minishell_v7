@@ -6,7 +6,7 @@
 /*   By: eliskam <eliskam@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 17:25:13 by emencova          #+#    #+#             */
-/*   Updated: 2024/10/02 18:29:42 by eliskam          ###   ########.fr       */
+/*   Updated: 2024/10/04 21:17:40 by eliskam          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,7 +147,10 @@ int parse_redir(t_exec *exec, char **args)
     }
     return (0);
 }
-*/
+
+
+
+//THIS WORKED!!!!!///
 
 int parse_redir(t_exec *exec, char **args)
 {
@@ -206,11 +209,109 @@ int parse_redir(t_exec *exec, char **args)
 }
 
 
+//WOOOORKSSSS////
+
+int parse_redir(t_exec *exec, char **args)
+{
+    int i = 0;
+    
+    while (args[i])
+    {
+        if (ft_strcmp(args[i], ">") == 0)
+        {
+            exec = outfile_one(exec, args, &i);
+            if (i == -1) // If open failed or file not specified
+                return (0);
+        }
+        else if (ft_strcmp(args[i], ">>") == 0)
+        {
+            exec = outfile_two(exec, args, &i);
+            if (i == -1)
+                return (0);
+        }
+        else if (ft_strcmp(args[i], "<") == 0)
+        {
+            exec = infile_one(exec, args, &i);
+            if (i == -1)
+                return (0);
+        }
+        else if (ft_strcmp(args[i], "<<") == 0)
+        {
+            exec = infile_two(exec, args, &i);
+            if (i == -1)
+                return (0);
+        }
+        i++;
+    }
+    return (1);
+}
+*/
+
+int parse_redir(t_exec *exec, char **args)
+{
+    int i;
+
+    i = 0;
+    while (args[i])
+    {
+        if (ft_strcmp(args[i], ">") == 0)
+        {
+            if (!args[i + 1])
+            {
+                printf("Error: No output file specified\n");
+                return (0);
+            }
+            exec->out = open_fd(exec->out, args[i + 1], 1, 0);
+            if (exec->out == -1)
+            {
+                perror("Error opening output file");
+                return (0);
+            }
+            args[i] = NULL;
+            args[i + 1] = NULL;
+            return (1);
+        }
+        else if (ft_strcmp(args[i], ">>") == 0)
+        {
+            if (!args[i + 1])
+            {
+                printf("Error: No output file specified\n");
+                return (0);
+            }
+            exec->out = open_fd(exec->out, args[i + 1], 1, 1);
+            if (exec->out == -1)
+            {
+                perror("Error opening output file");
+                return (0);
+            }
+            args[i] = NULL;
+            args[i + 1] = NULL;
+            return (1);
+        }
+        else if (ft_strcmp(args[i], "<") == 0)
+        {
+            exec = infile_one(exec, args, &i);
+            if (exec->in == -1)
+                return (0);
+            return (1);
+        }
+        else if (ft_strcmp(args[i], "<<") == 0)
+        {
+            exec = infile_two(exec, args, &i);
+            if (exec->in == -1)
+                return (0);
+            return (1);
+        }
+        i++;
+    }
+    return (0);
+}
+
 int ft_str_is_space(char *line)
 {
     while (*line)
     {
-        if (!isspace(*line))
+        if (!ft_isspace(*line))
             return 0;
         line++;
     }

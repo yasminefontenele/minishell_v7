@@ -6,7 +6,7 @@
 /*   By: eliskam <eliskam@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 11:47:09 by yfontene          #+#    #+#             */
-/*   Updated: 2024/10/04 15:10:21 by eliskam          ###   ########.fr       */
+/*   Updated: 2024/10/04 22:17:50 by eliskam          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,7 +181,13 @@ char **split_pipes(char *line)
     bool in_quotes = false;
     char quote_type = '\0';
     t_list *cmd_list = NULL;
-    
+
+    if (line[i] == '|')
+    {
+        write(STDERR_FILENO, "Error: Misuse of pipe\n", 23);
+        g_env.exit_status = 2;
+        return (NULL);
+    }
     while (line[i])
     {
         if ((line[i] == '"' || line[i] == '\'') && (quote_type == '\0' || quote_type == line[i]))
@@ -224,6 +230,8 @@ void tokenize_commands(char **cmdstr, t_list **commands_list, t_shell *shell)
     t_list *new_node;
 
     cmds = split_pipes(*cmdstr);
+    if (!cmds)
+        return;
     i = 0;
     while (cmds[i])
     {

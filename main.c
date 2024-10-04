@@ -6,7 +6,7 @@
 /*   By: eliskam <eliskam@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/10 17:01:48 by emencova          #+#    #+#             */
-/*   Updated: 2024/10/04 15:19:37 by eliskam          ###   ########.fr       */
+/*   Updated: 2024/10/04 22:20:24 by eliskam          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,9 @@ int main(int ac, char **av, char **envp)
 		ft_lstclear(&command_list, free);
 		command_list = NULL;
         free(line);
+        printf("%d\n", g_env.exit_status);
     }
  //   cleanup_shell(&shell);
+ //   printf("%d\n", g_env.exit_status);
     return (g_env.exit_status);
 }
