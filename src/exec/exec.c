@@ -6,12 +6,13 @@
 /*   By: eliskam <eliskam@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/01 22:31:57 by emencova          #+#    #+#             */
-/*   Updated: 2024/10/04 22:06:39 by eliskam          ###   ########.fr       */
+/*   Updated: 2024/10/05 20:55:29 by eliskam          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execute.h"
 #include <dirent.h>
+
 
 int pipe_builtin(t_shell *shell, t_list *cmd_ls, int *exit, int len)
 {
@@ -33,27 +34,22 @@ int pipe_builtin(t_shell *shell, t_list *cmd_ls, int *exit, int len)
         signal(SIGINT, SIG_IGN);
         signal(SIGQUIT, SIG_IGN); 
     }        
-    return g_env.exit_status;
+    return (g_env.exit_status);
 }
 
+ //LAST THAT WORKED!!!!
 void execute_pipeline(t_shell *shell, t_list *commands_list)
 {
     int fd[2];
     int prev_fd;
     t_list *cmd_node;
-    t_exec *exec;
+  //  t_exec *exec;
     
     cmd_node = commands_list;
     prev_fd = -1;
     while (cmd_node)
     {
-        exec = (t_exec *)cmd_node->content;
-        if (ft_strcmp(exec->args[0], "|") == 0)
-        {
-            write(STDERR_FILENO, "Error: Misuse of pipe\n", 23);
-            g_env.exit_status = 2; // Set exit status to 2
-            return; // Return early on misuse
-        }
+      //  exec = (t_exec *)cmd_node->content;
         if (cmd_node->next)
         {
             if (pipe(fd) == -1)

@@ -6,7 +6,7 @@
 /*   By: eliskam <eliskam@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 17:25:13 by emencova          #+#    #+#             */
-/*   Updated: 2024/10/04 21:17:40 by eliskam          ###   ########.fr       */
+/*   Updated: 2024/10/05 17:04:11 by eliskam          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -208,8 +208,7 @@ int parse_redir(t_exec *exec, char **args)
     return (0);
 }
 
-
-//WOOOORKSSSS////
+// WORKS BEFORE LAST ONE
 
 int parse_redir(t_exec *exec, char **args)
 {
@@ -246,7 +245,7 @@ int parse_redir(t_exec *exec, char **args)
     return (1);
 }
 */
-
+//// LAST THAT WORKS
 int parse_redir(t_exec *exec, char **args)
 {
     int i;
@@ -258,7 +257,8 @@ int parse_redir(t_exec *exec, char **args)
         {
             if (!args[i + 1])
             {
-                printf("Error: No output file specified\n");
+                printf("Error: syntax error near unexpected token `newline'\n");
+                exec->out = -1;
                 return (0);
             }
             exec->out = open_fd(exec->out, args[i + 1], 1, 0);
@@ -275,7 +275,8 @@ int parse_redir(t_exec *exec, char **args)
         {
             if (!args[i + 1])
             {
-                printf("Error: No output file specified\n");
+                printf("Error: syntax error near unexpected token `newline'\n");
+                exec->out = -1;
                 return (0);
             }
             exec->out = open_fd(exec->out, args[i + 1], 1, 1);
@@ -290,6 +291,12 @@ int parse_redir(t_exec *exec, char **args)
         }
         else if (ft_strcmp(args[i], "<") == 0)
         {
+            if (!args[i + 1])
+            {
+                printf("bash: syntax error near unexpected token `newline'\n");
+                exec->in = -1;
+                return (0);
+            }
             exec = infile_one(exec, args, &i);
             if (exec->in == -1)
                 return (0);
@@ -297,6 +304,12 @@ int parse_redir(t_exec *exec, char **args)
         }
         else if (ft_strcmp(args[i], "<<") == 0)
         {
+            if (!args[i + 1])
+            {
+                printf("bash: syntax error near unexpected token `newline'\n");
+                exec->in = -1;
+                return (0);
+            }
             exec = infile_two(exec, args, &i);
             if (exec->in == -1)
                 return (0);

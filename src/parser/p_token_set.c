@@ -6,7 +6,7 @@
 /*   By: eliskam <eliskam@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 11:47:09 by yfontene          #+#    #+#             */
-/*   Updated: 2024/10/04 22:17:50 by eliskam          ###   ########.fr       */
+/*   Updated: 2024/10/05 11:38:26 by eliskam          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,8 +134,8 @@ void filler_stokens(char **cmds, t_tokens **token, int nbr, t_shell *shell)
         //printf("Token original %d: %s\n", j, (*token)[i].tokens[j]);
         (*token)[i].tokens[j] = remove_quotes((*token)[i].tokens[j]);
         //printf("Token após remover aspas %d: %s\n", j, (*token)[i].tokens[j]);
-        if (get_token_type((*token)[i].tokens[j], ft_strlen((*token)[i].tokens[j])))
-            printf("Redirection token found: %s\n", (*token)[i].tokens[j]);
+       // if (get_token_type((*token)[i].tokens[j], ft_strlen((*token)[i].tokens[j])))
+           // printf("Redirection token found: %s\n", (*token)[i].tokens[j]);
         if ((*token)[i].tokens[j][0] == '$')
             (*token)[i].tokens[j] = dollar_config((*token)[i].tokens[j], 0, shell);
         j++;

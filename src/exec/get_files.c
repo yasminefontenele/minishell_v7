@@ -6,7 +6,7 @@
 /*   By: eliskam <eliskam@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 17:23:23 by emencova          #+#    #+#             */
-/*   Updated: 2024/10/04 21:41:38 by eliskam          ###   ########.fr       */
+/*   Updated: 2024/10/05 13:41:37 by eliskam          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,6 +170,7 @@ int open_fd(int fd, char *path, int is_output, int append)
     return (fd);
 }
 
+
 t_exec *outfile_one(t_exec *node, char **ags, int *len)
 {
     char *error_msg;
@@ -216,11 +217,12 @@ t_exec *outfile_two(t_exec *node, char **ags, int *len)
     return (node);
 }
 
+/*
 t_exec *infile_one(t_exec *node, char **ags, int *len)
 {
-  //  char *new_line;
+    char *new_line;
 	
-//	new_line = "syntax error";
+	new_line = "syntax error";
     (*len)++;
     if (ags[*len])
         node->in = open_fd(node->in, ags[*len], 0, 0);
@@ -228,11 +230,36 @@ t_exec *infile_one(t_exec *node, char **ags, int *len)
     if (!ags[*len] || node->in == -1)
 	{
         *len = -1;
-      //  ft_putendl_fd(new_line, 2);
+        ft_putendl_fd(new_line, 2);
 		g_env.exit_status = 1;
         *len = -1;	
     }
     return (node);
+}
+*/
+
+t_exec *infile_one(t_exec *node, char **ags, int *len) {
+    char *new_line = "syntax error";
+    (*len)++;
+
+    // Check if the next argument exists after '<'
+    if (!ags[*len]) {
+        ft_putendl_fd(new_line, 2); // Print syntax error if no argument follows
+        node->in = -1; // Set in to -1 to indicate an error
+        g_env.exit_status = 1; // Set exit status
+        return node; // Return early
+    }
+
+    // Attempt to open the file for reading
+    node->in = open_fd(node->in, ags[*len], 0, 0);
+    
+    // If opening the file fails
+    if (node->in == -1) {
+        ft_putendl_fd(new_line, 2); // Print error message
+        g_env.exit_status = 1; // Set exit status
+    }
+    
+    return node; // Return the node
 }
 
 t_exec	*infile_two(t_exec *node, char **ags, int *len)
@@ -263,5 +290,3 @@ t_exec	*infile_two(t_exec *node, char **ags, int *len)
 	}
 	return (node);
 }
-
-

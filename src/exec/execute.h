@@ -6,7 +6,7 @@
 /*   By: eliskam <eliskam@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 14:57:57 by emencova          #+#    #+#             */
-/*   Updated: 2024/10/04 21:57:11 by eliskam          ###   ########.fr       */
+/*   Updated: 2024/10/05 20:43:24 by eliskam          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 # define ERR_MEM	10
 # define ERR_ISDIR	11
 # define ERR_NOTDIR	12
+# define ERR_EXECVE 13
 
 # include <stdio.h>
 # include <readline/readline.h>
@@ -110,5 +111,6 @@ int is_valid_env_var(const char *var_name);
 
 
 char *get_env_for_export(t_shell *shell, const char *var);
+char **copy_environment(char **original);
 
 #endif
