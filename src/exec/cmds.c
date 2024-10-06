@@ -6,7 +6,7 @@
 /*   By: eliskam <eliskam@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 16:34:30 by emencova          #+#    #+#             */
-/*   Updated: 2024/10/05 20:57:34 by eliskam          ###   ########.fr       */
+/*   Updated: 2024/10/06 12:59:26 by eliskam          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -235,6 +235,7 @@ void command_get_redir(t_shell *shell, t_list *comnd)
 }
 
 */
+
 /// WORKS WITH unset USER | env | grep USER
 
 void command_get_pipeline(t_shell *shell, t_list *comnd)
@@ -278,6 +279,7 @@ void command_get_pipeline(t_shell *shell, t_list *comnd)
     free_form(&str);
 }
 
+
 /// WORKS LAST!!!!!!!!!!!
 
 void command_get_redir(t_shell *shell, t_list *comnd)
@@ -292,6 +294,7 @@ void command_get_redir(t_shell *shell, t_list *comnd)
     str = NULL;
     node = comnd->content;
     original_stdout = dup(STDOUT_FILENO); 
+    printf(" entering command get redir\n");
 
     if (built_check(node)) 
     {
@@ -303,7 +306,6 @@ void command_get_redir(t_shell *shell, t_list *comnd)
         close(node->out);
         return;
     }
-     // NOT SURE ABOUT THIS BELOW?? /
     directory = check_cmd(shell, comnd, &str);
     if (directory)
     {
@@ -343,35 +345,6 @@ void command_get_redir(t_shell *shell, t_list *comnd)
     close(node->out);
 }
 
-/*
-void cmd_execute(t_shell *shell, t_list *commands_list)
-{
-    int check;
-    t_exec *exec;
-    
-    check = 0;
-    exec = commands_list->content;
-    if (!commands_list)
-    {
-        write(STDERR_FILENO, "Error: No commands to execute\n", 31);
-        return;
-    }
-    if (is_invalid_var_assignment(exec->args[0]))
-        return; 
-   // exec = commands_list->content;
-    check = parse_redir(exec, exec->args);
-    if (check == 1)
-    {
-        command_get_redir(shell, commands_list);
-        return;
-    }   
-    else if (check == 0 && commands_list->next)
-        execute_pipeline(shell, commands_list);
-    else 
-        command_get_single(shell, commands_list);
-}
-*/
-
 
 void cmd_execute(t_shell *shell, t_list *commands_list)
 {
@@ -389,8 +362,15 @@ void cmd_execute(t_shell *shell, t_list *commands_list)
     check = parse_redir(exec, exec->args);
     if (check == 1)
     {
+        printf("came back after parse redir and check == 1");
         command_get_redir(shell, commands_list);
         return;
+    }
+    if (check == 2)
+    {
+        // Here we handled a redirection, including a here-document
+        printf("came back after parse redir and check == 1, returning to prompt.\n");
+        return; // Ensure we return to the prompt without executing any command
     }
     else if (check == 0)
     {
